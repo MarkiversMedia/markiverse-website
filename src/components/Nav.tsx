@@ -30,12 +30,30 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* the open menu covers the viewport, so the page behind it must not scroll */
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    /* the document element is the scroll container here, so locking only
+       body still lets the page scroll behind the menu */
+    const root = document.documentElement;
+    const prevOverflow = root.style.overflow;
+    root.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      root.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-40 transition-all duration-300 ${
-        scrolled
-          ? "bg-ink/85 backdrop-blur-xl border-b border-line"
-          : "bg-transparent"
+        open
+          ? "bg-ink"
+          : scrolled
+            ? "bg-ink/85 backdrop-blur-xl border-b border-line"
+            : "bg-transparent"
       }`}
     >
       <motion.div
@@ -105,7 +123,8 @@ export default function Nav() {
         <div className="flex items-center gap-2 lg:hidden">
           <ThemeSwitcher />
           <button
-            aria-label="Toggle menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
             className="flex h-10 w-10 flex-col items-center justify-center gap-1.5"
             onClick={() => setOpen(!open)}
           >
@@ -125,7 +144,7 @@ export default function Nav() {
       </nav>
 
       {open && (
-        <div className="border-t border-line bg-ink/95 px-6 py-6 backdrop-blur-xl lg:hidden">
+        <div className="fixed inset-x-0 bottom-0 top-[72px] overflow-y-auto border-t border-line bg-ink px-6 py-6 lg:hidden">
           <ul className="flex flex-col gap-4">
             {LINKS.map((l) => (
               <li key={l.href}>
@@ -138,9 +157,15 @@ export default function Nav() {
                 </a>
               </li>
             ))}
-            <li className="pt-2">
-              <a href={AUDIT_URL} className="btn-primary" target="_blank" rel="noopener">
-                Run Free Brand Audit →
+            {/* no CTA here: the menu is opened to navigate, not to convert.
+                The desktop bar can carry one because it is always visible. */}
+            <li>
+              <a
+                href={CONTACT_URL}
+                className="text-base font-medium text-off"
+                onClick={() => setOpen(false)}
+              >
+                Contact Us
               </a>
             </li>
           </ul>
