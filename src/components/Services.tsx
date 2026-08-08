@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import Reveal from "./Reveal";
@@ -68,6 +68,9 @@ export default function Services() {
   /* mobile renders the list as an accordion, so it needs a collapsed state
      the desktop tab strip never has */
   const [openMobile, setOpenMobile] = useState<number | null>(0);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  /* set on tap so the post-animation scroll never fires on first render */
+  const pendingScroll = useRef<number | null>(null);
 
   const select = (i: number) => {
     if (i !== active) {
@@ -78,7 +81,29 @@ export default function Services() {
 
   const toggle = (i: number) => {
     select(i);
-    setOpenMobile((prev) => (prev === i ? null : i));
+    const willOpen = openMobile !== i;
+    setOpenMobile(willOpen ? i : null);
+    /* the scroll itself waits for the expand to finish — see revealRow */
+    pendingScroll.current = willOpen ? i : null;
+  };
+
+  /* A row tapped near the bottom of the screen would otherwise expand off the
+     fold. Pull it up under the fixed nav, but only once the panels have
+     finished animating: a panel collapsing *above* this row shifts it upward,
+     so measuring any earlier overshoots by that panel's height. */
+  const revealRow = (i: number) => {
+    if (pendingScroll.current !== i) return;
+    pendingScroll.current = null;
+    if (!window.matchMedia("(max-width: 1023px)").matches) return;
+    requestAnimationFrame(() => {
+      const row = itemRefs.current[i];
+      if (!row) return;
+      const NAV_HEIGHT = 72;
+      window.scrollTo({
+        top: window.scrollY + row.getBoundingClientRect().top - NAV_HEIGHT - 12,
+        behavior: "smooth",
+      });
+    });
   };
 
   return (
@@ -107,6 +132,9 @@ export default function Services() {
               return (
                 <div
                   key={s.n}
+                  ref={(el) => {
+                    itemRefs.current[i] = el;
+                  }}
                   /* mobile highlights whatever is expanded; desktop highlights
                      whatever is hovered/selected */
                   className={`border-b transition-colors first:border-t ${
@@ -178,6 +206,7 @@ export default function Services() {
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                          onAnimationComplete={() => revealRow(i)}
                           className="overflow-hidden"
                         >
                           <div className="relative mb-4 h-44 w-full overflow-hidden rounded-2xl border border-line">
