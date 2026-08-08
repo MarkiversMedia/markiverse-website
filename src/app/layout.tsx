@@ -18,6 +18,13 @@ export const metadata: Metadata = {
   title: "Markiverse — India's Leading Digital Marketing Agency for the AI Search Era",
   description:
     "Built by Strategists. Sharpened by AI. Markiverse helps enterprise and B2B brands get recommended by AI — not just ranked on Google. Run a free DeSiRE brand audit in under 3 minutes.",
+  /* staging site — see the note in app/robots.ts before launch */
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: { index: false, follow: false },
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
