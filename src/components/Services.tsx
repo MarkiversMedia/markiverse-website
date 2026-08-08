@@ -65,12 +65,20 @@ const TEXT_VARIANTS = [
 export default function Services() {
   const [active, setActive] = useState(0);
   const [variant, setVariant] = useState(TEXT_VARIANTS[0]);
+  /* mobile renders the list as an accordion, so it needs a collapsed state
+     the desktop tab strip never has */
+  const [openMobile, setOpenMobile] = useState<number | null>(0);
 
   const select = (i: number) => {
     if (i !== active) {
       setVariant(TEXT_VARIANTS[Math.floor(Math.random() * TEXT_VARIANTS.length)]);
     }
     setActive(i);
+  };
+
+  const toggle = (i: number) => {
+    select(i);
+    setOpenMobile((prev) => (prev === i ? null : i));
   };
 
   return (
@@ -95,43 +103,113 @@ export default function Services() {
           <div className="flex flex-col justify-between">
             {SERVICES.map((s, i) => {
               const isActive = active === i;
+              const isOpen = openMobile === i;
               return (
-                <button
+                <div
                   key={s.n}
-                  onMouseEnter={() => select(i)}
-                  onFocus={() => select(i)}
-                  onClick={() => select(i)}
-                  className={`group block w-full border-b py-[18px] text-left transition-colors first:border-t ${
-                    isActive ? "border-teal/40" : "border-line"
-                  }`}
+                  /* mobile highlights whatever is expanded; desktop highlights
+                     whatever is hovered/selected */
+                  className={`border-b transition-colors first:border-t ${
+                    isOpen ? "border-teal/40" : "border-line"
+                  } ${isActive ? "lg:border-teal/40" : "lg:border-line"}`}
                 >
-                  <span className="flex items-baseline gap-5">
-                    <span
-                      className={`display text-sm font-bold transition-colors ${
-                        isActive ? "text-teal-bright" : "text-mist/50"
-                      }`}
-                    >
-                      {s.n}
+                  <button
+                    onMouseEnter={() => select(i)}
+                    onFocus={() => select(i)}
+                    onClick={() => toggle(i)}
+                    aria-expanded={isOpen}
+                    aria-controls={`service-panel-${s.slug}`}
+                    className="group block w-full py-[18px] text-left"
+                  >
+                    <span className="flex items-baseline gap-5">
+                      <span
+                        className={`display text-sm font-bold transition-colors ${
+                          isOpen ? "text-teal-bright" : "text-mist/50"
+                        } ${isActive ? "lg:text-teal-bright" : "lg:text-mist/50"}`}
+                      >
+                        {s.n}
+                      </span>
+                      <span
+                        className={`display flex-1 text-[clamp(1.3rem,2.1vw,1.8rem)] font-bold transition-all duration-300 ${
+                          isOpen ? "text-teal-bright" : "text-off"
+                        } ${
+                          isActive
+                            ? "lg:translate-x-1.5 lg:text-teal-bright"
+                            : "lg:translate-x-0 lg:text-off"
+                        }`}
+                      >
+                        {s.name}
+                      </span>
+                      {/* desktop: hover arrow. mobile: accordion chevron */}
+                      <span
+                        aria-hidden
+                        className={`hidden text-xl transition-all duration-300 lg:inline ${
+                          isActive
+                            ? "translate-x-0 text-teal-bright opacity-100"
+                            : "-translate-x-2 opacity-0"
+                        }`}
+                      >
+                        →
+                      </span>
+                      <svg
+                        aria-hidden
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={`h-5 w-5 flex-none self-center transition-transform duration-300 lg:hidden ${
+                          isOpen ? "rotate-180 text-teal-bright" : "text-mist/60"
+                        }`}
+                      >
+                        <path d="M6 9l6 6 6-6" />
+                      </svg>
                     </span>
-                    <span
-                      className={`display flex-1 text-[clamp(1.3rem,2.1vw,1.8rem)] font-bold transition-all duration-300 ${
-                        isActive ? "translate-x-1.5 text-teal-bright" : "text-off"
-                      }`}
-                    >
-                      {s.name}
-                    </span>
-                    <span
-                      aria-hidden
-                      className={`text-xl transition-all duration-300 ${
-                        isActive
-                          ? "translate-x-0 text-teal-bright opacity-100"
-                          : "-translate-x-2 opacity-0"
-                      }`}
-                    >
-                      →
-                    </span>
-                  </span>
-                </button>
+                  </button>
+
+                  {/* mobile only: the copy opens directly under the item tapped */}
+                  <div className="lg:hidden">
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          id={`service-panel-${s.slug}`}
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="relative mb-4 h-44 w-full overflow-hidden rounded-2xl border border-line">
+                            <Image
+                              src={s.img}
+                              alt={s.name}
+                              fill
+                              sizes="(max-width: 1024px) 100vw, 0px"
+                              className="object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/35 to-transparent" />
+                            <span
+                              aria-hidden
+                              className="ghost absolute right-4 top-1 text-[3.5rem] leading-none"
+                            >
+                              {s.n}
+                            </span>
+                          </div>
+                          <p className="text-[14.5px] leading-[1.8] text-mist">
+                            {s.desc}
+                          </p>
+                          <a
+                            href={`${CONTACT_URL}?service=${s.slug}&utm_source=homepage&utm_medium=services_section`}
+                            className="link-arrow mb-5 mt-3 text-[14px]"
+                          >
+                            Reach Out to Us <span aria-hidden>→</span>
+                          </a>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
               );
             })}
           </div>
@@ -192,18 +270,6 @@ export default function Services() {
           </div>
         </div>
 
-        {/* mobile: description under the list, no image */}
-        <div className="mt-6 lg:hidden">
-          <p className="text-[14.5px] leading-[1.8] text-mist">
-            {SERVICES[active].desc}
-          </p>
-          <a
-            href={`${CONTACT_URL}?service=${SERVICES[active].slug}&utm_source=homepage&utm_medium=services_section`}
-            className="link-arrow mt-3 text-[14px]"
-          >
-            Reach Out to Us <span aria-hidden>→</span>
-          </a>
-        </div>
       </div>
     </section>
   );
