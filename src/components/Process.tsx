@@ -31,7 +31,7 @@ export default function Process() {
       <div className="pointer-events-none absolute -right-32 top-1/3 h-[420px] w-[420px] rounded-full bg-orange/5 blur-[120px]" />
 
       <div className="relative mx-auto max-w-[1240px] px-5">
-        <Reveal className="mb-16">
+        <Reveal className="mb-14 lg:mb-16">
           <span className="eyebrow mb-5">Our Process</span>
           <h2 className="display max-w-[820px] text-[clamp(2rem,4.2vw,3.3rem)] font-bold leading-[1.08] text-off">
             How We Build{" "}
@@ -42,20 +42,23 @@ export default function Process() {
           </h2>
         </Reveal>
 
-        <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-y-12">
           {STEPS.map((s, i) => (
             <Reveal key={s.n} delay={i * 0.1}>
-              <div className="group relative h-full pt-6">
+              {/* pt only from lg up — it exists to clear the connecting line, which is lg:block */}
+              <div className="group relative h-full lg:pt-6">
                 {/* connecting line */}
                 <div className="absolute left-0 top-0 hidden h-px w-full bg-track lg:block">
                   <div className="h-full w-0 bg-gradient-to-r from-teal to-teal-bright transition-all duration-700 group-hover:w-full" />
                 </div>
                 <div className="absolute -top-[5px] left-0 hidden h-[11px] w-[11px] rounded-full border-2 border-teal bg-ink transition-colors duration-300 group-hover:bg-teal-bright lg:block" />
 
-                <span className="ghost block text-6xl leading-none transition-all duration-300 group-hover:-translate-y-1">
+                {/* smaller on mobile: the stroke-only numeral reads as blank space to many
+                    eyes, so less of it means less perceived void between steps */}
+                <span className="ghost block text-5xl leading-none transition-all duration-300 group-hover:-translate-y-1 lg:text-6xl">
                   {s.n}
                 </span>
-                <h3 className="display mb-3 mt-4 text-lg font-bold text-off">{s.title}</h3>
+                <h3 className="display mb-3 mt-2.5 text-lg font-bold text-off lg:mt-4">{s.title}</h3>
                 <p className="text-[14px] leading-[1.8] text-mist">{s.body}</p>
               </div>
             </Reveal>
