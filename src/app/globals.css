@@ -11,6 +11,9 @@
   --color-orange-l: #f59830;
   --color-off: #f4f7fc;
   --color-mist: #8b9bb4;
+  /* Muted text that still clears WCAG AA 4.5:1 — use instead of text-mist/50–/70.
+     90% is the floor that passes on the darkest surface we put it on (panel2). */
+  --color-dim: color-mix(in srgb, var(--color-mist) 90%, var(--color-ink));
   --color-line: rgba(255, 255, 255, 0.1);
   --color-line2: rgba(255, 255, 255, 0.2);
   --color-veil: rgba(255, 255, 255, 0.05);
@@ -65,6 +68,8 @@
   --color-orange-l: #c96f06;
   --color-off: #0b1628;
   --color-mist: #55677f;
+  /* light theme is already only 5.4:1 at full strength — no room to dim */
+  --color-dim: #55677f;
   --color-line: rgba(11, 22, 40, 0.12);
   --color-line2: rgba(11, 22, 40, 0.22);
   --color-veil: rgba(11, 22, 40, 0.04);
@@ -192,6 +197,27 @@ body {
   color: var(--color-off);
 }
 
+/* ---------- hero entrance ----------
+   Same choreography the hero used to get from framer-motion, but driven by CSS so
+   it starts at first paint instead of waiting for React to hydrate. The hero copy
+   is the LCP element, so keeping it off the JS critical path is what makes it fast.
+   Per-element knobs are set inline: --hero-rise / --hero-dur / --hero-delay / --hero-ease. */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--hero-rise, 24px));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.hero-in {
+  /* `backwards` holds the hidden state through the delay, then hands the element
+     back to its plain style — no leftover identity transform once it has landed. */
+  animation: hero-rise var(--hero-dur, 0.7s) var(--hero-ease, ease-out) var(--hero-delay, 0s) backwards;
+}
+
 /* ---------- marquee ---------- */
 @keyframes marquee {
   from { transform: translateX(0); }
@@ -231,6 +257,7 @@ body {
   .marquee-track { animation: none; }
   *, *::before, *::after {
     animation-duration: 0.001s !important;
+    animation-delay: 0s !important;
     transition-duration: 0.001s !important;
   }
 }

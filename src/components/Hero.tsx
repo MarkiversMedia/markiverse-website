@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { AUDIT_URL } from "./links";
 
@@ -281,7 +281,6 @@ function Radar() {
 
 /* ---------------- hero ---------------- */
 export default function Hero() {
-  const reduce = useReducedMotion();
   const words = ["Built", "by", "Strategists.", "Sharpened", "by", "AI."];
 
   return (
@@ -293,59 +292,55 @@ export default function Hero() {
 
       <div className="relative mx-auto grid w-full max-w-[1240px] items-center gap-14 px-5 py-6 lg:grid-cols-[1.05fr_0.95fr] lg:py-8">
         <div>
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-teal/25 bg-teal/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-teal-bright"
+          <div
+            style={{ "--hero-rise": "20px", "--hero-dur": "0.6s" } as CSSProperties}
+            className="hero-in mb-5 inline-flex items-center gap-2.5 rounded-full border border-teal/25 bg-teal/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-teal-bright"
           >
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal opacity-60" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-teal-bright" />
             </span>
             India&apos;s Leading Digital Marketing Agency for the AI Search Era
-          </motion.div>
+          </div>
 
           <h1 className="display mb-5 text-[clamp(2.4rem,min(6.2vw,8.5vh),5.2rem)] font-bold leading-[1.02] text-off">
             {words.map((w, i) => (
-              <motion.span
+              <span
                 key={i}
-                className={`inline-block ${
+                className={`hero-in inline-block ${
                   w === "Strategists." ? "text-teal-bright" : w === "AI." ? "text-orange-l" : ""
                 }`}
-                initial={reduce ? false : { opacity: 0, y: 42 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.15 + i * 0.09, ease: [0.22, 1, 0.36, 1] }}
+                style={
+                  {
+                    "--hero-rise": "42px",
+                    "--hero-delay": `${(0.15 + i * 0.09).toFixed(2)}s`,
+                    "--hero-ease": "cubic-bezier(0.22, 1, 0.36, 1)",
+                  } as CSSProperties
+                }
               >
                 {w}
                 {i < words.length - 1 && <span>&nbsp;</span>}
-              </motion.span>
+              </span>
             ))}
           </h1>
 
-          <motion.p
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.75 }}
-            className="mb-7 max-w-[520px] text-lg leading-relaxed text-mist"
+          <p
+            style={{ "--hero-delay": "0.75s" } as CSSProperties}
+            className="hero-in mb-7 max-w-[520px] text-lg leading-relaxed text-mist"
           >
             The next SEO battle isn&apos;t about search rankings — it&apos;s about AI
             recommendations. We make sure AI answers with{" "}
             <strong className="text-off">your brand</strong>.
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.9 }}
-          >
+          <div className="hero-in" style={{ "--hero-delay": "0.9s" } as CSSProperties}>
             <a href={AUDIT_URL} target="_blank" rel="noopener" className="btn-primary !px-8 !py-4 !text-base">
               Run Free Brand Audit <span aria-hidden>→</span>
             </a>
             <p className="mt-4 text-[13px] font-medium text-mist">
               Free &nbsp;·&nbsp; Results in under 3 minutes &nbsp;·&nbsp; No sales call
             </p>
-          </motion.div>
+          </div>
         </div>
 
         <div className="flex justify-center lg:justify-end lg:pr-16">

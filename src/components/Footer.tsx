@@ -69,7 +69,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-line py-6 text-center text-[12px] text-mist/70">
+      <div className="border-t border-line py-6 text-center text-[12px] text-dim">
         © {new Date().getFullYear()} Markiverse Media. All rights reserved.
       </div>
     </footer>

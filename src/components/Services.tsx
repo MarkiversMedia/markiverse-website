@@ -152,8 +152,8 @@ export default function Services() {
                     <span className="flex items-baseline gap-5">
                       <span
                         className={`display text-sm font-bold transition-colors ${
-                          isOpen ? "text-teal-bright" : "text-mist/50"
-                        } ${isActive ? "lg:text-teal-bright" : "lg:text-mist/50"}`}
+                          isOpen ? "text-teal-bright" : "text-dim"
+                        } ${isActive ? "lg:text-teal-bright" : "lg:text-dim"}`}
                       >
                         {s.n}
                       </span>

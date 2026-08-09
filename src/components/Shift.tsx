@@ -80,7 +80,7 @@ export default function Shift() {
                 </motion.div>
               </Reveal>
             ))}
-            <p className="col-span-2 text-[11px] text-mist/60">
+            <p className="col-span-2 text-[11px] text-dim">
               *Source:{" "}
               <a
                 href="https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/"
