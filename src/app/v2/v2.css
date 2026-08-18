@@ -1,0 +1,176 @@
+/* ------------------------------------------------------------------
+   v2 concept — produx.design-inspired monochrome system.
+   Everything is scoped under .v2 so the classic homepage keeps its
+   own theme tokens untouched.
+------------------------------------------------------------------- */
+.v2 {
+  --v2-bg: #0c0c0c;
+  --v2-fg: #e9e9e6;
+  --v2-soft: #cfcfcb;
+  --v2-mut: #8f8f8c;
+  --v2-dim: #5f5f5b;
+  --v2-line: rgba(255, 255, 255, 0.14);
+  --v2-accent: #0dafb8;
+  /* the testimonial block flips to produx's olive + paper palette */
+  --v2-olive: #232a26;
+  --v2-paper: #e9e5dc;
+  --v2-paper-ink: #1c1c1a;
+
+  background: var(--v2-bg);
+  color: var(--v2-fg);
+  font-family: var(--font-body);
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* ---------- light theme (toggled via [ LIGHT ] in the v2 nav) ---------- */
+html[data-v2-theme="light"] .v2 {
+  --v2-bg: #f0eee9;
+  --v2-fg: #161613;
+  --v2-soft: #2c2c28;
+  --v2-mut: #67675f;
+  --v2-dim: #83837b;
+  --v2-line: rgba(20, 20, 16, 0.16);
+  --v2-accent: #0a98a1;
+  --v2-olive: #232a26;
+  --v2-paper: #e9e5dc;
+  --v2-paper-ink: #1c1c1a;
+}
+
+/* client logos: white silhouettes on dark, black on light */
+.v2-logo-img {
+  filter: brightness(0) invert(1);
+}
+html[data-v2-theme="light"] .v2 .v2-logo-img {
+  filter: brightness(0);
+}
+
+.v2 ::selection {
+  background: var(--v2-fg);
+  color: var(--v2-bg);
+}
+
+/* ---------- type helpers ---------- */
+.v2-mono {
+  font-family: var(--font-v2-mono), ui-monospace, monospace;
+  letter-spacing: 0.08em;
+}
+
+/* section label, e.g. "SELECTED WORK/" */
+.v2-label {
+  font-family: var(--font-v2-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--v2-mut);
+}
+
+/* big display sentences */
+.v2-h {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+  color: var(--v2-soft);
+}
+
+/* mono underlined call-to-action, produx "LET'S TALK" style */
+.v2-cta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--font-v2-mono), ui-monospace, monospace;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--v2-fg);
+  border-bottom: 1px solid var(--v2-fg);
+  padding-bottom: 0.35rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+.v2-cta:hover {
+  color: var(--v2-accent);
+  border-color: var(--v2-accent);
+}
+
+/* bracketed nav / footer links: [ WORK ] */
+.v2-bracket {
+  font-family: var(--font-v2-mono), ui-monospace, monospace;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--v2-mut);
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+.v2-bracket::before {
+  content: "[ ";
+  color: var(--v2-dim);
+}
+.v2-bracket::after {
+  content: " ]";
+  color: var(--v2-dim);
+}
+.v2-bracket:hover {
+  color: var(--v2-fg);
+}
+
+/* brackets slide apart on hover */
+.v2-bracket::before,
+.v2-bracket::after {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.v2-bracket:hover::before {
+  transform: translateX(-4px);
+}
+.v2-bracket:hover::after {
+  transform: translateX(4px);
+}
+
+/* bottom-up wipe reveal for the hero wordmark */
+@keyframes v2-wipe {
+  from {
+    clip-path: inset(100% 0 0 0);
+    transform: translateY(10%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: none;
+  }
+}
+.v2-wipe {
+  animation: v2-wipe 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.1s backwards;
+}
+
+/* ---------- full-width wordmark (SVG text stretched to the edges) ---------- */
+.v2-wordmark-text {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 128px;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- capability marquee row ---------- */
+.v2-marquee-item {
+  font-family: var(--font-v2-mono), ui-monospace, monospace;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--v2-mut);
+}
+
+/* slower loop for the wide industry cards */
+.v2-track-slow {
+  display: flex;
+  width: max-content;
+  animation: marquee 55s linear infinite;
+}
+.v2-track-slow:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-track-slow {
+    animation: none;
+  }
+}

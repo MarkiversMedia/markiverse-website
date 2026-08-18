@@ -81,7 +81,8 @@ export default function Nav() {
         style={{ scaleX: progress }}
       />
       <nav className="mx-auto flex h-[72px] max-w-[1240px] items-center justify-between px-5">
-        <a href="#top" className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <a href="#top" className="flex items-center gap-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={LOGO_URL}
@@ -97,6 +98,15 @@ export default function Nav() {
             Markiverse
           </span>
         </a>
+
+          {/* user-approved 2026-08-11: preview link to the v2 design concept */}
+          <a
+            href="/v2"
+            className="rounded-full border border-teal/40 bg-teal/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-teal-bright transition-colors hover:bg-teal/20 sm:text-[11px]"
+          >
+            Preview v2 ↗
+          </a>
+        </div>
 
         <ul className="hidden items-center gap-8 lg:flex">
           {LINKS.map((l) => (
