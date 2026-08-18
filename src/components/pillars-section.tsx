@@ -140,14 +140,14 @@ export function PillarsSection() {
           </figure>
         </div>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-[340px_1fr]">
+        <div className="surface-card mt-14 grid gap-8 rounded-[2rem] p-6 sm:p-10 lg:grid-cols-[340px_1fr]">
           <div className="flex gap-3 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
             {PILLARS.map((p, i) => (
               <button
                 key={p.id}
                 onClick={() => setActive(i)}
                 suppressHydrationWarning
-                className={`flex min-w-[190px] items-center gap-3 rounded-xl border px-4 py-4 text-left transition-all ${i === active ? "border-accent/40 bg-accent/10 text-foreground" : "border-border bg-card/40 text-muted-foreground hover:border-border hover:bg-card"}`}
+                className={`flex min-w-[190px] items-center gap-3 rounded-2xl border px-4 py-4 text-left transition-all ${i === active ? "border-accent/40 bg-accent/10 text-foreground" : "border-border bg-card text-muted-foreground hover:border-border hover:bg-secondary"}`}
               >
                 <p.icon
                   className={`h-5 w-5 shrink-0 ${i === active ? "text-accent" : "text-muted-foreground"}`}
@@ -158,7 +158,7 @@ export function PillarsSection() {
               </button>
             ))}
           </div>
-          <div className="surface-card rounded-2xl p-7 sm:p-10">
+          <div>
             <div className="flex items-center gap-3">
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-accent/15 text-accent">
                 <pillar.icon className="h-5 w-5" />
