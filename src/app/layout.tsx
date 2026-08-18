@@ -1,48 +1,30 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Space_Grotesk } from "next/font/google";
-import "./globals.css";
-
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+import "./fonts.css";
+import "./markiverse.css";
 
 export const metadata: Metadata = {
-  title: "Markiverse — India's Leading Digital Marketing Agency for the AI Search Era",
+  title: "Markiverse | AI-Native Marketing Agency for Growth",
   description:
-    "Built by Strategists. Sharpened by AI. Markiverse helps enterprise and B2B brands get recommended by AI — not just ranked on Google. Run a free DeSiRE brand audit in under 3 minutes.",
-  /* staging site — see the note in app/robots.ts before launch */
-  robots: {
-    index: false,
-    follow: false,
-    nocache: true,
-    googleBot: { index: false, follow: false },
+    "Strategy, Experience, Demand, Revenue, Intelligence and Creative run as one AI-sharpened growth engine — from market definition to attributed pipeline.",
+  openGraph: {
+    title: "Markiverse | AI-Native Marketing Agency for Growth",
+    description:
+      "Strategy, Experience, Demand, Revenue, Intelligence and Creative run as one AI-sharpened growth engine — from market definition to attributed pipeline.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${jakarta.variable} ${spaceGrotesk.variable} h-full antialiased`}
-    >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "try{var t=localStorage.getItem('mv-theme');if(t&&t!=='ink')document.documentElement.setAttribute('data-theme',t)}catch(e){}",
-          }}
-        />
-      </head>
-      <body className="min-h-full flex flex-col noise">{children}</body>
+    <html lang="en">
+      <body>{children}</body>
     </html>
   );
 }
