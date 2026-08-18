@@ -1,7 +1,26 @@
+/* Defensive backstop against horizontal scroll — body already has
+   overflow-x:hidden in the base stylesheet, but html did not. */
+html {
+  overflow-x: hidden;
+}
+
 /* All h2 headings site-wide */
 h2 {
   font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   font-weight: 400;
+}
+
+/* The hero highlight text ("speed into revenue") only needs to stay on one
+   line once there is room for it — forcing nowrap unconditionally let it
+   overflow narrow phones and push the page into horizontal scroll. */
+.hero-highlight-wrap {
+  white-space: normal;
+}
+
+@media (min-width: 640px) {
+  .hero-highlight-wrap {
+    white-space: nowrap;
+  }
 }
 
 /* Applied directly on <h2> elements alongside their existing utility classes.

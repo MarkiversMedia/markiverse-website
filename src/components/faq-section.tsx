@@ -27,7 +27,7 @@ export function FaqSection() {
   return (
     <section id="faqs" className="py-24 sm:py-32">
       <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-8 lg:grid-cols-[1fr_1.4fr]">
-        <div>
+        <div className="min-w-0">
           <p className="eyebrow text-accent">FAQs</p>
           <h2 className="mt-4 heading-h2">
             The questions we get on the{" "}

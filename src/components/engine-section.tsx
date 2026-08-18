@@ -38,7 +38,7 @@ export function EngineSection() {
       <DriftOrbs className="opacity-70" />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-[1fr_1fr]">
-          <div>
+          <div className="min-w-0">
             <p className="eyebrow text-accent">OUR PRODUCT</p>
             <h2 className="mt-4 max-w-3xl heading-h2">
               One{" "}

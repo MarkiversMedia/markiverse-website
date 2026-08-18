@@ -31,7 +31,7 @@ export function OutcomesSection() {
       <DriftOrbs />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         <div className="relative grid items-center gap-10 overflow-visible lg:grid-cols-[1fr_1fr]">
-          <div>
+          <div className="min-w-0">
             <p className="eyebrow text-accent">Outcomes</p>
             <h2 className="mt-4 max-w-3xl heading-h2">
               Real problems,{" "}

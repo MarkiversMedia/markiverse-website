@@ -15,7 +15,7 @@ export function ShiftSection() {
       <DriftOrbs />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2">
-          <Reveal className="space-y-5 text-lg text-muted-foreground">
+          <Reveal className="min-w-0 space-y-5 text-lg text-muted-foreground">
             <p className="eyebrow text-accent">The shift</p>
             <h2 className="heading-h2 text-foreground">
               Your{" "}

@@ -99,7 +99,7 @@ export function PillarsSection() {
     <section id="pillars" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-2">
-          <div>
+          <div className="min-w-0">
             <p className="eyebrow text-accent">The operating model</p>
             <h2 className="mt-4 max-w-3xl heading-h2">
               Most agencies sell services.
