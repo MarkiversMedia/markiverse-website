@@ -21,7 +21,7 @@ function HeroVisual() {
           {["AI Acceleration", "Outcome First", "Revenue Growth"].map((tag) => (
             <div
               key={tag}
-              className="inline-flex items-center justify-center rounded-full border border-black px-4 py-3.5 text-center text-sm font-semibold text-black"
+              className="inline-flex items-center justify-center rounded-full border border-ink-black px-4 py-3.5 text-center text-sm font-semibold text-ink-black"
             >
               {tag}
             </div>

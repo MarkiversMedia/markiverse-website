@@ -107,7 +107,7 @@ export function PillarsSection() {
               <span className="heading-accent text-accent">
                 We run{" "}
                 <span className="relative inline-block">
-                  <span className="relative z-10 heading-accent text-black">
+                  <span className="relative z-10 heading-accent text-ink-black">
                     six
                   </span>
                 </span>{" "}

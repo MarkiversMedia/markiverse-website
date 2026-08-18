@@ -19,3 +19,14 @@ h2 {
   font-size: 48px;
   line-height: 1.15;
 }
+
+/* Plain black text/border — this project's CSS is a pre-built static file with
+   no Tailwind build step, so Tailwind's own text-black/border-black utilities
+   aren't present in it and silently no-op. These are real, hand-written rules. */
+.text-ink-black {
+  color: #000000;
+}
+
+.border-ink-black {
+  border-color: #000000;
+}
