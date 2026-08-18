@@ -104,10 +104,10 @@ export function PillarsSection() {
             <h2 className="mt-4 max-w-3xl heading-h2">
               Most agencies sell services.
               <br />
-              <span className="heading-accent text-black">
+              <span className="heading-accent text-accent">
                 We run{" "}
                 <span className="relative inline-block">
-                  <span className="relative z-10 heading-accent text-accent">
+                  <span className="relative z-10 heading-accent text-black">
                     six
                   </span>
                 </span>{" "}
