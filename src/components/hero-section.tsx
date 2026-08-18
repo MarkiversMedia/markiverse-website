@@ -60,7 +60,7 @@ export function HeroSection() {
                   speed into revenue
                 </span>
               </span>
-              ?
+              <span className="text-accent">?</span>
             </span>
           </h1>
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground">
