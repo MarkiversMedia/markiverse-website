@@ -149,9 +149,11 @@ export function PillarsSection() {
                 suppressHydrationWarning
                 className={`flex min-w-[190px] items-center gap-3 rounded-2xl border px-4 py-4 text-left transition-all ${i === active ? "border-accent/40 bg-accent/10 text-foreground" : "border-border bg-card text-muted-foreground hover:border-border hover:bg-secondary"}`}
               >
-                <p.icon
-                  className={`h-5 w-5 shrink-0 ${i === active ? "text-accent" : "text-muted-foreground"}`}
-                />
+                <span
+                  className={`grid h-8 w-8 shrink-0 place-items-center rounded-full ${i === active ? "bg-accent text-accent-foreground" : "text-muted-foreground"}`}
+                >
+                  <p.icon className="h-4 w-4" />
+                </span>
                 <span className="font-display text-base font-semibold">
                   {p.n} · {p.name}
                 </span>
@@ -160,7 +162,7 @@ export function PillarsSection() {
           </div>
           <div>
             <div className="flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-accent/15 text-accent">
+              <span className="grid h-11 w-11 place-items-center rounded-xl bg-accent text-accent-foreground">
                 <pillar.icon className="h-5 w-5" />
               </span>
               <div>
