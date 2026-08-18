@@ -52,7 +52,7 @@ export function HeroSection() {
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             MARKIVERSE — AI-POWERED MARKETING. BUILT TO WORK.
           </span>
-          <h1 className="mt-7 font-display text-[2.5rem] leading-[1.06] font-bold sm:text-[3.4rem] lg:text-[3.8rem]">
+          <h1 className="mt-7 heading-h2">
             Is your brand racing in AI—and turning{" "}
             <span className="whitespace-nowrap">
               <span className="relative inline-block">
