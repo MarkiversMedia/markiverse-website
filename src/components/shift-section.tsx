@@ -17,10 +17,10 @@ export function ShiftSection() {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <Reveal className="space-y-5 text-lg text-muted-foreground">
             <p className="eyebrow text-accent">The shift</p>
-            <h2 className="font-display text-4xl font-bold text-foreground sm:text-5xl">
+            <h2 className="heading-h2 text-foreground">
               Your{" "}
               <span className="relative inline-block">
-                <span className="relative z-10 font-display text-5xl font-black text-accent sm:text-6xl">
+                <span className="relative z-10 heading-accent text-accent">
                   buyer&apos;s journey
                 </span>
               </span>{" "}
@@ -69,7 +69,7 @@ export function ShiftSection() {
               className="group relative bg-card p-7 hover:z-10 hover:bg-accent/[0.04] hover:shadow-[0_20px_50px_-12px_color-mix(in_oklab,var(--brand-orange)_20%,transparent)]"
             >
               <span className="absolute inset-x-0 top-0 h-1 scale-x-0 bg-[image:var(--gradient-accent)] transition-transform duration-300 group-hover:scale-x-100" />
-              <p className="font-display text-4xl font-bold text-accent">
+              <p className="heading-accent text-accent">
                 <CountUp value={stat.k} />
               </p>
               <p className="mt-3 text-sm text-muted-foreground transition-colors group-hover:text-foreground">

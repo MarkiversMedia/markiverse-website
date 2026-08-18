@@ -21,7 +21,7 @@ function HeroVisual() {
           {["AI Acceleration", "Outcome First", "Revenue Growth"].map((tag) => (
             <div
               key={tag}
-              className="inline-flex items-center justify-center rounded-full border border-accent/30 bg-accent/10 px-4 py-3.5 text-center text-sm font-semibold text-accent"
+              className="inline-flex items-center justify-center rounded-full border border-black px-4 py-3.5 text-center text-sm font-semibold text-black"
             >
               {tag}
             </div>
@@ -46,7 +46,7 @@ export function HeroSection() {
   return (
     <section id="top" className="relative overflow-visible bg-hero pt-32">
       <div className="pointer-events-none absolute inset-0 grid-lines opacity-60" />
-      <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-5 pb-20 sm:px-8 lg:grid-cols-[1.05fr_1fr]">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-5 pb-20 sm:px-8 lg:grid-cols-2">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 eyebrow text-muted-foreground">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
@@ -56,7 +56,7 @@ export function HeroSection() {
             Is your brand racing in AI—and turning{" "}
             <span className="whitespace-nowrap">
               <span className="relative inline-block">
-                <span className="relative z-10 font-display text-[2.8rem] font-black text-accent sm:text-[3.8rem] lg:text-[4.2rem]">
+                <span className="relative z-10 heading-accent text-accent">
                   speed into revenue
                 </span>
               </span>

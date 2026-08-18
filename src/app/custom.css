@@ -1,0 +1,21 @@
+/* All h2 headings site-wide */
+h2 {
+  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+}
+
+/* Applied directly on <h2> elements alongside their existing utility classes */
+.heading-h2 {
+  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.25;
+}
+
+/* Racing Sans One accent headings — the highlighted phrase inside a heading */
+.heading-accent {
+  font-family: 'Racing Sans One', cursive;
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 1.15;
+}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./fonts.css";
 import "./markiverse.css";
+import "./custom.css";
 
 export const metadata: Metadata = {
   title: "Markiverse | AI-Native Marketing Agency for Growth",

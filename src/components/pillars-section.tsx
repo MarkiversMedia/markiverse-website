@@ -98,16 +98,16 @@ export function PillarsSection() {
   return (
     <section id="pillars" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+        <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
             <p className="eyebrow text-accent">The operating model</p>
-            <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold sm:text-5xl">
+            <h2 className="mt-4 max-w-3xl heading-h2">
               Most agencies sell services.
               <br />
-              <span className="text-accent">
+              <span className="heading-accent text-accent">
                 We run{" "}
                 <span className="relative inline-block">
-                  <span className="relative z-10 font-display text-5xl font-black text-accent sm:text-6xl">
+                  <span className="relative z-10 heading-accent text-accent">
                     six
                   </span>
                 </span>{" "}

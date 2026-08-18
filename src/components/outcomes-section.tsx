@@ -33,10 +33,10 @@ export function OutcomesSection() {
         <div className="relative grid items-center gap-10 overflow-visible lg:grid-cols-[1fr_1fr]">
           <div>
             <p className="eyebrow text-accent">Outcomes</p>
-            <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold sm:text-5xl">
+            <h2 className="mt-4 max-w-3xl heading-h2">
               Real problems,{" "}
               <span className="relative inline-block">
-                <span className="relative z-10 font-display text-5xl font-black text-accent sm:text-6xl">
+                <span className="relative z-10 heading-accent text-accent">
                   solved
                 </span>
               </span>{" "}

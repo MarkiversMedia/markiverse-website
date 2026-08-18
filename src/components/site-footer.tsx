@@ -8,10 +8,10 @@ export function SiteFooter() {
       <div className="relative mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
         <Reveal className="surface-card rounded-3xl p-10 text-center sm:p-16">
           <p className="eyebrow text-accent">Start here</p>
-          <h2 className="mx-auto mt-4 max-w-3xl font-display text-4xl font-bold sm:text-5xl">
+          <h2 className="mx-auto mt-4 max-w-3xl heading-h2">
             See where your growth engine is leaking — in{" "}
             <span className="relative inline-block">
-              <span className="relative z-10 font-display text-5xl font-black text-accent sm:text-6xl">
+              <span className="relative z-10 heading-accent text-accent">
                 48 hours
               </span>
             </span>

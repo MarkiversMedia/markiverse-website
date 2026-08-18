@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude code
+.claude/
+.claude.json
+.claude-code-router/
+.codex/
+.mcp.json

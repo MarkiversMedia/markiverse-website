@@ -40,10 +40,10 @@ export function EngineSection() {
         <div className="grid items-center gap-10 lg:grid-cols-[1fr_1fr]">
           <div>
             <p className="eyebrow text-accent">OUR PRODUCT</p>
-            <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold sm:text-5xl">
+            <h2 className="mt-4 max-w-3xl heading-h2">
               One{" "}
               <span className="relative inline-block">
-                <span className="relative z-10 font-display text-5xl font-black text-accent sm:text-6xl">
+                <span className="relative z-10 heading-accent text-accent">
                   growth engine
                 </span>
               </span>{" "}

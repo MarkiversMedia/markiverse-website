@@ -76,8 +76,9 @@ export function RadarScanDemo() {
       <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
         <div>
           <p className="eyebrow text-accent">Live demo</p>
-          <h3 className="mt-3 font-display text-2xl font-bold sm:text-3xl">
-            Run a sample <span className="italic text-accent">SEO RADAR</span>{" "}
+          <h3 className="mt-3 heading-h2">
+            Run a sample{" "}
+            <span className="heading-accent italic text-accent">SEO RADAR</span>{" "}
             scan
           </h3>
           <p className="mt-4 text-muted-foreground">
