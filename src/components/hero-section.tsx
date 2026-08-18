@@ -53,7 +53,7 @@ export function HeroSection() {
             MARKIVERSE — AI-POWERED MARKETING. BUILT TO WORK.
           </span>
           <h1 className="mt-7 heading-h2">
-            Is your brand racing in AI—and turning{" "}
+            Is your brand racing in AI, and turning{" "}
             <span className="whitespace-nowrap">
               <span className="relative inline-block">
                 <span className="relative z-10 heading-accent text-accent">
