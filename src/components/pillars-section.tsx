@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import {
   BrainCircuit,
   ChevronDown,
@@ -42,7 +42,7 @@ const PILLARS: Pillar[] = [
     name: "Experience",
     icon: Layers,
     promise: "Every touchpoint feels like it was built for that one buyer.",
-    body: "Brand systems, websites and product-grade UX that carry the story from first impression to signed contract — with personalisation that adapts to industry, role and intent.",
+    body: "Brand systems, websites and product-grade UX that carry the story from first impression to signed contract â€” with personalisation that adapts to industry, role and intent.",
     chain: ["Brand", "Website", "UX", "Digital experience", "Personalisation"],
     ai: "Real-time intent models reshape hero copy, proof and CTAs per visitor segment.",
   },
@@ -51,10 +51,10 @@ const PILLARS: Pillar[] = [
     n: "03",
     name: "Demand",
     icon: Megaphone,
-    promise: "Be the answer — in search, in AI, and in the inbox.",
+    promise: "Be the answer â€” in search, in AI, and in the inbox.",
     body: "SEO and GEO so AI engines recommend you, paid that compounds instead of leaking, ABM for the accounts that matter, and content plus outbound working the same list.",
     chain: ["SEO", "GEO", "Paid", "ABM", "Campaigns", "Content", "Outbound"],
-    ai: "We track how ChatGPT, Gemini, Perplexity and AI Overviews describe your brand — weekly — and close the gaps.",
+    ai: "We track how ChatGPT, Gemini, Perplexity and AI Overviews describe your brand â€” weekly â€” and close the gaps.",
   },
   {
     id: "revenue",
@@ -87,19 +87,12 @@ const PILLARS: Pillar[] = [
     n: "06",
     name: "Creative",
     icon: Palette,
-    promise: "Work that is impossible to scroll past — and easy to remember.",
+    promise: "Work that is impossible to scroll past â€” and easy to remember.",
     body: "Brand identity, design systems, video and storytelling built for the platforms your buyers actually live on, produced at campaign speed.",
     chain: ["Brand", "Design", "Video", "Storytelling", "Campaigns"],
     ai: "Generative tooling multiplies variants; our strategists and directors decide what ships.",
   },
 ];
-
-/* Hub geometry: six nodes on a ring around the client, in a 100×100 box. */
-const RING_R = 36;
-const NODE_POS = PILLARS.map((_, i) => {
-  const a = ((i * 60 - 90) * Math.PI) / 180;
-  return { x: 50 + RING_R * Math.cos(a), y: 50 + RING_R * Math.sin(a) };
-});
 
 export function PillarsSection() {
   const [active, setActive] = useState(0);
@@ -138,7 +131,7 @@ export function PillarsSection() {
               </span>
             </h2>
             <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-              Each pillar stands on its own. Together they compound — strategy
+              Each pillar stands on its own. Together they compound â€” strategy
               informs experience, experience feeds demand, demand fuels
               revenue, and intelligence rewires all of it.
             </p>
@@ -160,12 +153,12 @@ export function PillarsSection() {
               className="w-full rounded-[1.25rem] object-cover"
             />
             <figcaption className="eyebrow px-2 pb-1 pt-3 text-muted-foreground">
-              The strategist on the mic — six pillars, one clear call
+              The strategist on the mic â€” six pillars, one clear call
             </figcaption>
           </figure>
         </div>
 
-        {/* Mobile / tablet: accordion — every pillar visible, one open at a time */}
+        {/* Mobile / tablet: accordion â€” every pillar visible, one open at a time */}
         <div className="surface-card mt-14 rounded-[2rem] p-3 lg:hidden">
           {PILLARS.map((p, i) => {
             const open = i === active;
@@ -191,7 +184,7 @@ export function PillarsSection() {
                     <p.icon className="h-4 w-4" />
                   </span>
                   <span className="flex-1 font-display text-base font-semibold">
-                    {p.n} · {p.name}
+                    {p.n} Â· {p.name}
                   </span>
                   <ChevronDown
                     className={`h-4 w-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
@@ -209,7 +202,7 @@ export function PillarsSection() {
                       className="overflow-hidden"
                     >
                       <div className="px-4 pb-5">
-                        <PillarDetail pillar={p} compact />
+                        <PillarDetail pillar={p} />
                       </div>
                     </motion.div>
                   )}
@@ -220,30 +213,20 @@ export function PillarsSection() {
         </div>
 
         {/* Desktop: hub + detail panel */}
-        <div className="surface-card mt-14 hidden items-stretch gap-10 rounded-[2rem] p-10 lg:grid lg:grid-cols-[440px_1fr]">
-          <PillarHub active={active} onSelect={setActive} />
-          <PillarDesktopPanel active={active} />
+        <div className="surface-card mt-12 hidden items-stretch gap-6 rounded-[2rem] p-6 lg:grid lg:grid-cols-[400px_1fr]">
+          <PillarVideo />
+          <PillarDesktopPanel active={active} onSelect={setActive} />
         </div>
       </div>
     </section>
   );
 }
 
-/* ---------- The hub: six pillars around the client ---------- */
+/* ---------- Left visual: the strategist video ---------- */
 
-function PillarHub({
-  active,
-  onSelect,
-}: {
-  active: number;
-  onSelect: (i: number) => void;
-}) {
-  const reduce = useReducedMotion();
-  const hex = NODE_POS.map((p) => `${p.x},${p.y}`).join(" ");
-
+function PillarVideo() {
   return (
-    <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border">
-      {/* Background: the strategist video, ghosted under the hub */}
+    <figure className="relative h-full min-h-[360px] overflow-hidden rounded-2xl border border-border">
       <video
         src="/assets/f1-strategist-sketch.mp4"
         poster="/assets/f1-strategist-poster.jpg"
@@ -252,143 +235,12 @@ function PillarHub({
         loop
         playsInline
         preload="metadata"
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        aria-label="Race strategist on the pit wall, speaking into his headset mic and counting up six fingers before a fist pump"
+        className="absolute inset-0 h-full w-full object-cover"
       />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--card)_35%,transparent),color-mix(in_oklab,var(--card)_55%,transparent))]"
-      />
-      <div className="relative z-10 flex h-full flex-col justify-center px-6 py-8">
-      <div className="relative mx-auto aspect-square w-full max-w-[400px]">
-        {/* Lines */}
-        <svg
-          viewBox="0 0 100 100"
-          className="absolute inset-0 h-full w-full overflow-visible"
-          aria-hidden="true"
-        >
-          {/* slow outer orbit */}
-          <motion.circle
-            cx="50"
-            cy="50"
-            r={RING_R + 6}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-            strokeDasharray="1.2 2.4"
-            vectorEffect="non-scaling-stroke"
-            className="text-foreground/[0.07]"
-            style={{ transformOrigin: "50% 50%" }}
-            animate={reduce ? undefined : { rotate: 360 }}
-            transition={{ duration: 90, ease: "linear", repeat: Infinity }}
-          />
-          {/* mesh: everything is connected to everything */}
-          <polygon
-            points={hex}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-            vectorEffect="non-scaling-stroke"
-            className="text-foreground/[0.07]"
-          />
-          {/* spokes to the client */}
-          {NODE_POS.map((p, i) => {
-            const isActive = i === active;
-            return (
-              <g key={PILLARS[i].id}>
-                <line
-                  x1="50"
-                  y1="50"
-                  x2={p.x}
-                  y2={p.y}
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  vectorEffect="non-scaling-stroke"
-                  className="text-foreground/[0.07]"
-                />
-                {isActive && (
-                  <motion.line
-                    key={`active-${i}`}
-                    x1={p.x}
-                    y1={p.y}
-                    x2="50"
-                    y2="50"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeDasharray="1.6 2.2"
-                    vectorEffect="non-scaling-stroke"
-                    className="text-accent"
-                    initial={{ opacity: 0 }}
-                    animate={{
-                      opacity: 1,
-                      strokeDashoffset: reduce ? 0 : [0, -7.6],
-                    }}
-                    transition={{
-                      opacity: { duration: 0.25 },
-                      strokeDashoffset: {
-                        duration: 1.1,
-                        ease: "linear",
-                        repeat: Infinity,
-                      },
-                    }}
-                  />
-                )}
-              </g>
-            );
-          })}
-        </svg>
-
-        {/* Nodes */}
-        {PILLARS.map((p, i) => {
-          const pos = NODE_POS[i];
-          const isActive = i === active;
-          return (
-            <motion.button
-              key={p.id}
-              type="button"
-              onClick={() => onSelect(i)}
-              onMouseEnter={() => onSelect(i)}
-              onFocus={() => onSelect(i)}
-              aria-pressed={isActive}
-              suppressHydrationWarning
-              className={`absolute z-10 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full border py-1.5 pl-1.5 pr-3.5 font-display text-sm font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-accent/60 ${
-                isActive
-                  ? "border-accent/80 bg-accent/85 text-accent-foreground backdrop-blur-[2px]"
-                  : "border-foreground/25 bg-transparent text-foreground hover:border-accent/60"
-              }`}
-              style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
-              animate={{ scale: isActive ? 1.08 : 1 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 420, damping: 28 }}
-            >
-              {isActive && (
-                <motion.span
-                  layoutId="pillar-halo"
-                  aria-hidden="true"
-                  className="absolute -inset-1.5 rounded-full border-2 border-accent/35"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                />
-              )}
-              <span
-                className={`grid h-7 w-7 shrink-0 place-items-center rounded-full ${isActive ? "bg-accent-foreground/15" : "bg-transparent"}`}
-              >
-                <p.icon className="h-3.5 w-3.5" />
-              </span>
-              {p.name}
-            </motion.button>
-          );
-        })}
-      </div>
-      <p className="mx-auto mt-5 max-w-[400px] rounded-xl border border-border bg-card/90 px-5 py-3 text-center font-display text-sm font-semibold leading-snug text-foreground shadow-sm backdrop-blur-sm">
-        One client at the centre, six systems working on it at once. Hover any
-        pillar to see what we run there.
-      </p>
-      </div>
-    </div>
+    </figure>
   );
 }
-
 /* ---------- Detail sections ---------- */
 
 const sectionVariants = {
@@ -416,11 +268,9 @@ const itemVariants = {
 
 function PillarIntro({
   pillar,
-  compact = false,
   live = true,
 }: {
   pillar: Pillar;
-  compact?: boolean;
   live?: boolean;
 }) {
   return (
@@ -429,17 +279,12 @@ function PillarIntro({
       initial={false}
       animate={live ? "show" : "hidden"}
     >
-      {!compact && (
-        <p className="eyebrow text-accent">
-          Pillar {pillar.n} · {pillar.name}
-        </p>
-      )}
-      <h3
-        className={`font-display text-xl font-semibold sm:text-2xl ${compact ? "" : "mt-3"}`}
-      >
+      <h3 className="font-display text-xl font-semibold leading-snug">
         {pillar.promise}
       </h3>
-      <p className="mt-3 max-w-2xl text-muted-foreground">{pillar.body}</p>
+      <p className="mt-2.5 text-[15px] leading-relaxed text-muted-foreground">
+        {pillar.body}
+      </p>
     </motion.div>
   );
 }
@@ -459,7 +304,7 @@ function PillarServices({
       animate={live ? "show" : "hidden"}
     >
       <p className="eyebrow text-muted-foreground">What we deliver</p>
-      <ul className="mt-3 grid grid-cols-2 gap-x-8 gap-y-2.5 lg:grid-cols-3">
+      <ul className="mt-2.5 grid grid-cols-2 gap-x-6 gap-y-2 lg:grid-cols-4">
         {pillar.chain.map((step) => (
           <motion.li
             key={step}
@@ -506,16 +351,10 @@ function PillarAI({ pillar, live = true }: { pillar: Pillar; live?: boolean }) {
 }
 
 /* Mobile accordion body: sections in sequence, natural height */
-function PillarDetail({
-  pillar,
-  compact = false,
-}: {
-  pillar: Pillar;
-  compact?: boolean;
-}) {
+function PillarDetail({ pillar }: { pillar: Pillar }) {
   return (
     <div>
-      <PillarIntro pillar={pillar} compact={compact} />
+      <PillarIntro pillar={pillar} />
       <div className="mt-7 border-t border-border pt-5">
         <PillarServices pillar={pillar} />
       </div>
@@ -529,7 +368,7 @@ function PillarDetail({
 /* Desktop panel: each section is stacked across ALL six pillars in one grid
    cell, so every section takes the height of its tallest variant. Result:
    the dividers, the services block and the AI line sit at fixed positions
-   and nothing inside the box shifts when you switch pillars — only the
+   and nothing inside the box shifts when you switch pillars â€” only the
    words animate in. */
 function PillarStack({
   active,
@@ -556,22 +395,101 @@ function PillarStack({
   );
 }
 
-function PillarDesktopPanel({ active }: { active: number }) {
+/* Track strip: six numbered nodes on one line across the top of the panel.
+   Mirrors the hub selection; click a node to focus that pillar. */
+function PillarTrack({
+  active,
+  onSelect,
+}: {
+  active: number;
+  onSelect: (i: number) => void;
+}) {
+  const n = PILLARS.length;
+  const half = 100 / n / 2; // centre of the first/last column, in %
+  const span = 100 - half * 2; // distance between first and last centres
   return (
-    <div className="flex h-full min-w-0 flex-col rounded-2xl border border-border bg-card p-8">
+    <div className="relative">
+      {/* base line + accent line to the active node */}
+      <div
+        aria-hidden="true"
+        className="absolute top-3.5 h-px bg-border"
+        style={{ left: `${half}%`, right: `${half}%` }}
+      />
+      <motion.div
+        aria-hidden="true"
+        className="absolute top-3.5 h-0.5 -translate-y-px bg-accent"
+        style={{ left: `${half}%` }}
+        animate={{ width: `${(active / (n - 1)) * span}%` }}
+        transition={{ type: "spring", stiffness: 260, damping: 30 }}
+      />
+      <div className="relative grid" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
+        {PILLARS.map((p, i) => {
+          const isActive = i === active;
+          return (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => onSelect(i)}
+              aria-pressed={isActive}
+              suppressHydrationWarning
+              className="group flex flex-col items-center gap-2 outline-none"
+            >
+              <motion.span
+                className={`relative grid h-7 w-7 place-items-center rounded-full border font-display text-[11px] font-bold transition-colors ${
+                  isActive
+                    ? "border-accent bg-accent text-accent-foreground"
+                    : "border-border bg-card text-muted-foreground group-hover:border-accent/50 group-hover:text-foreground"
+                }`}
+                animate={{ scale: isActive ? 1.25 : 1 }}
+                transition={{ type: "spring", stiffness: 420, damping: 26 }}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="pillar-track-halo"
+                    aria-hidden="true"
+                    className="absolute -inset-1.5 rounded-full bg-accent/15"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span className="relative">{p.n}</span>
+              </motion.span>
+              <span
+                className={`text-xs transition-colors ${isActive ? "font-display font-semibold text-foreground" : "text-muted-foreground group-hover:text-foreground"}`}
+              >
+                {p.name}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function PillarDesktopPanel({
+  active,
+  onSelect,
+}: {
+  active: number;
+  onSelect: (i: number) => void;
+}) {
+  return (
+    <div className="flex h-full min-w-0 flex-col rounded-2xl border border-border bg-card px-7 py-6">
+      <PillarTrack active={active} onSelect={onSelect} />
+      <div className="mt-5 border-t border-border pt-5" />
       <PillarStack
         active={active}
         render={(p, live) => <PillarIntro pillar={p} live={live} />}
       />
-      <div className="mt-7 border-t border-border pt-5">
+      <div className="mt-5 border-t border-border pt-4">
         <PillarStack
           active={active}
           render={(p, live) => <PillarServices pillar={p} live={live} />}
         />
       </div>
-      {/* pinned to the bottom so the box fills the hub's height */}
-      <div className="mt-auto pt-7">
-        <div className="border-t border-border pt-5">
+      {/* pinned to the bottom so the box fills the video's height */}
+      <div className="mt-auto pt-5">
+        <div className="border-t border-border pt-4">
           <PillarStack
             active={active}
             render={(p, live) => <PillarAI pillar={p} live={live} />}
