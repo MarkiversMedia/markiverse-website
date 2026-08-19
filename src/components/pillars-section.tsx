@@ -112,14 +112,14 @@ export function PillarsSection() {
   };
 
   return (
-    <section id="pillars" className="relative py-24 sm:py-32 lg:py-10">
+    <section id="pillars" className="relative py-24 sm:py-32 lg:py-7">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         {/* Header: heading left, intro right on desktop so the whole section
             (header + panel) fits one desktop viewport. */}
         <div className="grid items-center gap-10 lg:grid-cols-[3fr_2fr] lg:items-end lg:gap-12">
           <div className="min-w-0">
             <p className="eyebrow text-accent">The operating model</p>
-            <h2 className="mt-4 max-w-3xl heading-h2 lg:max-w-none">
+            <h2 className="mt-4 max-w-3xl heading-h2 lg:mt-2 lg:max-w-none">
               Most agencies sell services.
               <br />
               <span className="heading-accent text-accent">
@@ -220,7 +220,7 @@ export function PillarsSection() {
         </div>
 
         {/* Desktop: hub + detail panel */}
-        <div className="surface-card mt-6 hidden items-stretch gap-5 rounded-[1.75rem] p-4 lg:grid lg:grid-cols-[380px_1fr]">
+        <div className="surface-card mt-5 hidden items-stretch gap-5 rounded-[1.75rem] p-4 lg:grid lg:grid-cols-[380px_1fr]">
           <PillarVideo />
           <PillarDesktopPanel active={active} onSelect={setActive} />
         </div>
@@ -286,10 +286,10 @@ function PillarIntro({
       initial={false}
       animate={live ? "show" : "hidden"}
     >
-      <h3 className="font-display text-xl font-semibold leading-snug lg:text-lg">
+      <h3 className="font-display text-xl font-semibold leading-snug">
         {pillar.promise}
       </h3>
-      <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground lg:text-sm lg:leading-normal">
+      <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground lg:leading-normal">
         {pillar.body}
       </p>
     </motion.div>
@@ -316,7 +316,7 @@ function PillarServices({
           <motion.li
             key={step}
             variants={itemVariants}
-            className="flex items-center gap-2.5 text-sm font-medium text-foreground"
+            className="flex items-center gap-2.5 text-sm font-medium text-foreground lg:text-[15px]"
           >
             <span
               aria-hidden="true"
@@ -349,7 +349,7 @@ function PillarAI({ pillar, live = true }: { pillar: Pillar; live?: boolean }) {
       <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent/10 text-accent">
         <Sparkles className="h-3.5 w-3.5" />
       </span>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-muted-foreground lg:text-[15px]">
         <span className="font-semibold text-foreground">AI layer. </span>
         {pillar.ai}
       </p>
@@ -461,7 +461,7 @@ function PillarTrack({
                 <span className="relative">{p.n}</span>
               </motion.span>
               <span
-                className={`text-xs transition-colors ${isActive ? "font-display font-semibold text-foreground" : "text-muted-foreground group-hover:text-foreground"}`}
+                className={`text-sm transition-colors ${isActive ? "font-display font-semibold text-foreground" : "text-muted-foreground group-hover:text-foreground"}`}
               >
                 {p.name}
               </span>
@@ -483,19 +483,19 @@ function PillarDesktopPanel({
   return (
     <div className="flex h-full min-w-0 flex-col rounded-2xl border border-border bg-card px-6 py-5">
       <PillarTrack active={active} onSelect={onSelect} />
-      <div className="mt-4 border-t border-border pt-4" />
+      <div className="mt-3 border-t border-border pt-3" />
       <PillarStack
         active={active}
         render={(p, live) => <PillarIntro pillar={p} live={live} />}
       />
-      <div className="mt-4 border-t border-border pt-3">
+      <div className="mt-3 border-t border-border pt-3">
         <PillarStack
           active={active}
           render={(p, live) => <PillarServices pillar={p} live={live} />}
         />
       </div>
       {/* pinned to the bottom so the box fills the video's height */}
-      <div className="mt-auto pt-4">
+      <div className="mt-auto pt-3">
         <div className="border-t border-border pt-3">
           <PillarStack
             active={active}
