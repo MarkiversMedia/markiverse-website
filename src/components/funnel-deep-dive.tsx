@@ -842,51 +842,74 @@ function StageDataCard({ stage, hint }: { stage: Stage; hint: string }) {
   );
 }
 
+const CHANNEL_COLOR: Record<string, string> = {
+  "Organic Search": "var(--brand-blue)",
+  "Paid Search": "var(--brand-orange)",
+  Social: "var(--brand-lime)",
+  Other: "var(--brand-amber)",
+};
+
 function ChannelMixCard({ className = "" }: { className?: string }) {
+  const max = Math.max(...CHANNEL_MIX.flatMap((c) => [c.value, c.target]));
   return (
-    <div className={`rounded-2xl border border-border bg-card p-5 sm:p-6 ${className}`}>
-      <p className="eyebrow text-muted-foreground">Acquisition mix vs industry</p>
-      <div className="mt-4 space-y-3">
-        {CHANNEL_MIX.map((channel) => (
-          <div
-            key={channel.label}
-            className="flex items-center justify-between gap-3"
-          >
-            <div className="flex items-center gap-2 text-sm">
-              <span
-                className="h-2.5 w-2.5 rounded-full"
-                style={{
-                  backgroundColor:
-                    channel.label === "Organic Search"
-                      ? "var(--brand-blue)"
-                      : channel.label === "Paid Search"
-                        ? "var(--brand-orange)"
-                        : channel.label === "Social"
-                          ? "var(--brand-lime)"
-                          : "var(--brand-amber)",
-                }}
-              />
-              {channel.label}
-            </div>
-            <div className="flex items-center gap-3 text-sm">
-              <span className="font-semibold">{channel.value}%</span>
-              <span
-                className={`text-xs ${channel.tone === "positive" ? "text-success" : channel.tone === "negative" ? "text-destructive" : "text-muted-foreground"}`}
-              >
-                {channel.tone === "positive"
-                  ? "↑"
-                  : channel.tone === "negative"
-                    ? "↓"
-                    : "→"}{" "}
-                {channel.target}%
-              </span>
-            </div>
-          </div>
-        ))}
+    <div className={`flex flex-col rounded-2xl border border-border bg-card p-5 sm:p-6 ${className}`}>
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="eyebrow text-muted-foreground">Acquisition mix vs industry</p>
+        <p className="flex items-center gap-3 text-[11px] text-muted-foreground">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-1.5 w-4 rounded-full bg-foreground/70" /> share
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-3 w-0.5 rounded-full bg-foreground/50" /> industry
+          </span>
+        </p>
       </div>
-      <p className="mt-4 text-xs text-muted-foreground">
-        Click any channel in the full diagnostic for the verdict and action
-        plan.
+      <div className="mt-5 flex flex-1 flex-col justify-evenly gap-4">
+        {CHANNEL_MIX.map((channel) => {
+          const color = CHANNEL_COLOR[channel.label] ?? "var(--brand-amber)";
+          const tone =
+            channel.tone === "positive"
+              ? "text-success"
+              : channel.tone === "negative"
+                ? "text-destructive"
+                : "text-muted-foreground";
+          const arrow =
+            channel.tone === "positive" ? "↑" : channel.tone === "negative" ? "↓" : "→";
+          return (
+            <div key={channel.label}>
+              <div className="flex items-baseline justify-between gap-3 text-sm">
+                <span className="flex items-center gap-2 font-medium">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
+                  {channel.label}
+                </span>
+                <span className="flex items-baseline gap-2 tabular-nums">
+                  <span className="font-display text-base font-bold">{channel.value}%</span>
+                  <span className={`text-xs ${tone}`}>
+                    {arrow} {channel.target}%
+                  </span>
+                </span>
+              </div>
+              {/* share bar with an industry-benchmark marker */}
+              <div className="relative mt-2 h-2.5 overflow-visible rounded-full bg-secondary">
+                <div
+                  className="h-full rounded-full"
+                  style={{
+                    width: `${(channel.value / max) * 100}%`,
+                    background: `linear-gradient(90deg, color-mix(in oklab, ${color} 70%, white), ${color})`,
+                  }}
+                />
+                <span
+                  className="absolute -top-[3px] h-4 w-0.5 rounded-full bg-foreground/50"
+                  style={{ left: `calc(${(channel.target / max) * 100}% - 1px)` }}
+                  title={`Industry: ${channel.target}%`}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p className="mt-5 text-xs text-muted-foreground">
+        Click any channel in the full diagnostic for the verdict and action plan.
       </p>
     </div>
   );
@@ -909,28 +932,53 @@ function BiggestLeakBanner({ className = "" }: { className?: string }) {
 }
 
 function AwarenessPagesCard() {
+  const max = Math.max(...AWARENESS_PAGES.map((p) => p.channelValue));
   return (
     <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
-      <p className="eyebrow text-muted-foreground">Where awareness starts</p>
-      <div className="mt-4 space-y-3">
-        {AWARENESS_PAGES.map((page) => (
-          <div
-            key={page.path}
-            className="flex items-center justify-between gap-3 text-sm"
-          >
-            <div className="min-w-0">
-              <p className="truncate font-medium">{page.path}</p>
-              <p className="text-xs text-muted-foreground">
-                {nf(page.total)} total · {nf(page.sessions)} sessions
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="font-semibold">{nf(page.channelValue)}</p>
-              <p className="text-xs text-muted-foreground">{page.channel}</p>
-            </div>
-          </div>
-        ))}
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="eyebrow text-muted-foreground">Where awareness starts</p>
+        <p className="text-[11px] text-muted-foreground">Top entry pages · 28 days</p>
       </div>
+      <ol className="mt-4 space-y-1.5">
+        {AWARENESS_PAGES.map((page, i) => (
+          <li
+            key={page.path}
+            className="relative overflow-hidden rounded-xl px-3 py-2.5 transition-colors hover:bg-secondary/60"
+          >
+            {/* proportional bar behind the row */}
+            <span
+              aria-hidden="true"
+              className="absolute inset-y-0 left-0 rounded-xl bg-accent/[0.07]"
+              style={{ width: `${(page.channelValue / max) * 100}%` }}
+            />
+            <div className="relative flex items-center justify-between gap-3 text-sm">
+              <div className="flex min-w-0 items-center gap-3">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-secondary font-display text-[11px] font-bold text-muted-foreground">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{page.path}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {nf(page.total)} total · {nf(page.sessions)} sessions
+                  </p>
+                </div>
+              </div>
+              <div className="shrink-0 text-right">
+                <p className="font-display text-base font-bold tabular-nums">
+                  {nf(page.channelValue)}
+                </p>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2 py-px text-[11px] text-muted-foreground">
+                  <span
+                    className="h-1.5 w-1.5 rounded-full"
+                    style={{ backgroundColor: CHANNEL_COLOR[page.channel] ?? "var(--brand-green)" }}
+                  />
+                  {page.channel}
+                </span>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
