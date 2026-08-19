@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CircleArrowRight, Target } from "lucide-react";
+import { ArrowDown, CircleArrowRight, Target } from "lucide-react";
+import { CosmicFunnel } from "./cosmic-funnel";
 
 type Tone = "positive" | "negative" | "neutral";
 
@@ -219,105 +220,6 @@ const AWARENESS_PAGES = [
 ];
 
 const nf = (n: number) => n.toLocaleString("en-US");
-
-function FunnelStage({
-  stage,
-  topWidth,
-  bottomWidth,
-  height,
-  isActive,
-  revealed,
-  index,
-  onHover,
-}: {
-  stage: Stage;
-  topWidth: number;
-  bottomWidth: number;
-  height: number;
-  isActive: boolean;
-  revealed: boolean;
-  index: number;
-  onHover: () => void;
-}) {
-  const top = (topWidth / 100) * 320;
-  const bottom = (bottomWidth / 100) * 320;
-  const topX = (320 - top) / 2;
-  const bottomX = (320 - bottom) / 2;
-  const path = `M ${topX} 0 L ${topX + top} 0 L ${bottomX + bottom} ${height} L ${bottomX} ${height} Z`;
-  const midY = height / 2;
-  return (
-    <g
-      onMouseEnter={onHover}
-      className="cursor-pointer"
-      style={{
-        opacity: revealed ? (isActive ? 1 : 0.9) : 0,
-        transform: revealed ? "translateY(0)" : "translateY(-14px)",
-        transition:
-          "opacity 520ms ease-out, transform 520ms cubic-bezier(0.16,1,0.3,1)",
-        transitionDelay: `${index * 180}ms`,
-      }}
-    >
-      <defs>
-        <linearGradient id={`grad-${stage.id}`} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor={stage.color} stopOpacity={0.85} />
-          <stop offset="100%" stopColor={stage.color} stopOpacity={1} />
-        </linearGradient>
-        <filter
-          id={`shadow-${stage.id}`}
-          x="-20%"
-          y="-20%"
-          width="140%"
-          height="140%"
-        >
-          <feDropShadow
-            dx="0"
-            dy="4"
-            stdDeviation="4"
-            style={{ floodColor: "color-mix(in oklab, var(--ink-shadow) 18%, transparent)" }}
-          />
-        </filter>
-      </defs>
-      <path
-        d={path}
-        fill={`url(#grad-${stage.id})`}
-        filter={`url(#shadow-${stage.id})`}
-        stroke="white"
-        strokeWidth="2"
-        className="transition-all duration-300"
-        style={{
-          transform: isActive ? "scale(1.02)" : "scale(1)",
-          transformOrigin: "center",
-        }}
-      />
-      <text
-        x="160"
-        y={midY - (stage.percent < 100 ? 16 : 6)}
-        textAnchor="middle"
-        className="fill-primary-foreground font-display text-[11px] font-semibold uppercase tracking-wider"
-      >
-        {stage.title}
-      </text>
-      <text
-        x="160"
-        y={midY + (stage.percent < 100 ? 5 : 16)}
-        textAnchor="middle"
-        className="fill-primary-foreground font-display text-[15px] font-bold"
-      >
-        {nf(stage.value)}
-      </text>
-      {stage.percent < 100 && (
-        <text
-          x="160"
-          y={midY + 22}
-          textAnchor="middle"
-          className="fill-primary-foreground/80 font-sans text-[10px]"
-        >
-          {stage.percent}% retained
-        </text>
-      )}
-    </g>
-  );
-}
 
 const OPPORTUNITY_ROWS = [
   {
@@ -613,34 +515,10 @@ function OpportunitiesTable() {
 
 export function FunnelDeepDive() {
   const [active, setActive] = useState(STAGES[0]);
-  const [revealed, setRevealed] = useState(false);
-  const svgRef = useRef<SVGSVGElement>(null);
-
-  useEffect(() => {
-    const el = svgRef.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setRevealed(true);
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setRevealed(true);
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.25 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const heights = [76, 74, 72, 70, 68];
-  const topWidths = [100, 80, 64, 50, 38];
-  const bottomWidths = [80, 64, 50, 38, 26];
+  const activate = (id: string) => {
+    const next = STAGES.find((s) => s.id === id);
+    if (next) setActive(next);
+  };
 
   return (
     <div
@@ -654,217 +532,381 @@ export function FunnelDeepDive() {
             The Golden Funnel: Eugene Schwartz&apos;s 5 buyer awareness stages
           </h3>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Hover each stage to see how many buyers are stuck at Unaware,
-            Problem Aware, Solution Aware, Product Aware and Most Aware — and
-            what SEO RADAR would do next.
+            <span className="lg:hidden">Tap</span>
+            <span className="hidden lg:inline">Hover</span> each stage to see
+            how many buyers are stuck at Unaware, Problem Aware, Solution
+            Aware, Product Aware and Most Aware — and what SEO RADAR would do
+            next.
           </p>
         </div>
         <span className="rounded-full border border-border bg-secondary px-4 py-2 text-xs font-semibold text-muted-foreground">
           Sample data: quantaloom.com · 28 days
         </span>
       </div>
-      <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
+
+      {/* Mobile / tablet: the funnel itself is an accordion — tap a layer to
+          unfold its data right beneath it. */}
+      <div className="mt-8 flex flex-col gap-4 lg:hidden">
+        <FunnelAccordion />
+        <ChannelMixCard />
+        <AwarenessPagesCard />
+        <BiggestLeakBanner />
+      </div>
+
+      {/* Desktop: interactive SVG funnel + side panel driven by hover */}
+      <div className="mt-10 hidden gap-8 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
         <div className="flex h-full flex-col rounded-2xl border border-border bg-card p-4 sm:p-6">
-          <div className="flex flex-1 items-center justify-center">
-            <svg
-              ref={svgRef}
-              viewBox="0 0 320 400"
-              className="h-auto w-full max-w-[360px]"
-              style={{ filter: "drop-shadow(var(--drop-shadow-float))" }}
-            >
-              {STAGES.map((stage, i) => (
-                <g
-                  key={stage.id}
-                  transform={`translate(0, ${heights.slice(0, i).reduce((a, b) => a + b, 0) + i * 8})`}
-                >
-                  <FunnelStage
-                    stage={stage}
-                    topWidth={topWidths[i]}
-                    bottomWidth={bottomWidths[i]}
-                    height={heights[i]}
-                    isActive={active.id === stage.id}
-                    revealed={revealed}
-                    index={i}
-                    onHover={() => setActive(stage)}
-                  />
-                </g>
-              ))}
-            </svg>
-          </div>
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-xs text-muted-foreground">
-            {STAGES.map((stage) => (
-              <button
-                key={stage.id}
-                onMouseEnter={() => setActive(stage)}
-                onClick={() => setActive(stage)}
-                suppressHydrationWarning
-                className={`inline-flex min-h-10 items-center gap-2 rounded-full px-3 py-1.5 font-medium transition-colors sm:min-h-0 ${active.id === stage.id ? "bg-secondary text-foreground" : "hover:bg-secondary/50"}`}
-              >
-                <span
-                  className="h-2.5 w-2.5 rounded-full"
-                  style={{ backgroundColor: stage.color }}
-                />
-                {stage.title}
-              </button>
-            ))}
-          </div>
-          <div className="mt-5 flex-1 rounded-xl border border-border bg-secondary/40 p-5">
-            <p className="eyebrow text-muted-foreground">Stage spotlight</p>
-            <p
-              className="mt-2 font-display text-lg font-semibold"
-              style={{ color: active.color }}
-            >
-              {active.title}: {active.sub}
-            </p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              {STAGE_NOTES[active.id]}
-            </p>
+          <div className="flex flex-1 items-start justify-center">
+            <CosmicFunnel
+              className="h-auto w-full max-w-[560px]"
+              onActivate={activate}
+              stages={STAGES.map((s) => ({
+                id: s.id,
+                title: s.title,
+                value: nf(s.value),
+                label: s.label,
+                sub: s.percent < 100 ? `${s.percent}% retained` : undefined,
+              }))}
+            />
           </div>
         </div>
+        {/* Right column: the two stage/mix cards. The left box stretches to
+            end exactly on the bottom of "Acquisition mix"; the third card
+            sits below the pair at full width. */}
         <div className="flex flex-col gap-4">
-          <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="eyebrow" style={{ color: active.color }}>
-                  {active.title} · the data behind
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Hover a stage to load
-                </p>
-              </div>
-              <div
-                className="rounded-full p-2"
-                style={{
-                  backgroundColor: `color-mix(in oklab, ${active.color} 12%, transparent)`,
-                }}
+          <StageDataCard stage={active} hint="Hover a stage to load" />
+          <BiggestLeakBanner className="flex-1" />
+        </div>
+        {/* Row 2: acquisition mix under the funnel, awareness pages under
+            the leak callout. */}
+        <ChannelMixCard />
+        <AwarenessPagesCard />
+      </div>
+
+      <OpportunitiesTable />
+    </div>
+  );
+}
+
+/* Trapezoid widths (percent of the row) for the mobile funnel accordion —
+   the same silhouette as the desktop SVG. */
+const ACCORDION_TOP = [100, 82, 66, 52, 40];
+const ACCORDION_BOTTOM = [82, 66, 52, 40, 28];
+
+/* Mobile funnel accordion: each layer is a tappable trapezoid; the tapped
+   layer scrolls to the top of the viewport and unfolds its data beneath it.
+   One layer open at a time; tapping it again folds it. */
+function FunnelAccordion() {
+  const [openId, setOpenId] = useState<string | null>(null);
+  // "Nudge": when the funnel scrolls into view, each layer lifts in turn from
+  // top to bottom (a few passes) to signal the layers are tappable. Stops on
+  // first tap; never starts under prefers-reduced-motion.
+  const [nudging, setNudging] = useState(false);
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+      return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setNudging(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const openStage = (i: number) => {
+    const id = STAGES[i].id;
+    const willOpen = openId !== id;
+    setNudging(false);
+    setOpenId(willOpen ? id : null);
+    if (!willOpen) return;
+    requestAnimationFrame(() => {
+      const el = rowRefs.current[i];
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + window.scrollY - 76;
+      window.scrollTo({ top, behavior: "smooth" });
+    });
+  };
+
+  return (
+    <div ref={rootRef} className="rounded-2xl border border-border bg-card p-4">
+      <p className="eyebrow text-center text-muted-foreground">
+        Tap a stage to unfold its data
+      </p>
+      <div className="mt-4 flex flex-col gap-1.5">
+        {STAGES.map((stage, i) => {
+          const open = openId === stage.id;
+          const tw = ACCORDION_TOP[i];
+          const bw = ACCORDION_BOTTOM[i];
+          const clip = `polygon(${(100 - tw) / 2}% 0, ${100 - (100 - tw) / 2}% 0, ${100 - (100 - bw) / 2}% 100%, ${(100 - bw) / 2}% 100%)`;
+          const next = STAGES[i + 1];
+          return (
+            <div
+              key={stage.id}
+              ref={(el) => {
+                rowRefs.current[i] = el;
+              }}
+              className="scroll-mt-20"
+            >
+              <button
+                type="button"
+                onClick={() => openStage(i)}
+                aria-expanded={open}
+                aria-controls={`funnel-panel-${stage.id}`}
+                suppressHydrationWarning
+                className="relative block w-full"
               >
-                <Target className="h-4 w-4" style={{ color: active.color }} />
-              </div>
-            </div>
-            <div className="mt-5">
-              <div className="flex items-baseline gap-2">
                 <span
-                  className="font-display text-4xl font-bold"
-                  style={{ color: active.color }}
+                  className={`flex min-h-[4.5rem] w-full flex-col items-center justify-center px-2 text-center text-primary-foreground transition-[transform,filter] duration-200 ${open ? "scale-[1.04] brightness-110" : ""} ${nudging && !open ? "animate-funnel-nudge" : ""}`}
+                  style={{
+                    clipPath: clip,
+                    background: `linear-gradient(180deg, color-mix(in oklab, ${stage.color} 88%, white), ${stage.color})`,
+                    animationDelay: `${i * 0.22}s`,
+                  }}
                 >
-                  {nf(active.value)}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  {active.label}
-                </span>
-              </div>
-              <p className="mt-1 text-sm" style={{ color: active.color }}>
-                {active.sub}
-              </p>
-            </div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              {active.stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-xl border border-border p-3 transition-colors hover:bg-secondary/50"
-                >
-                  <p className="font-display text-xl font-bold">{stat.value}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {stat.label}
-                  </p>
-                  {stat.sub && (
-                    <p
-                      className={`mt-1 text-xs ${stat.tone === "positive" ? "text-success" : stat.tone === "negative" ? "text-destructive" : "text-muted-foreground"}`}
-                    >
-                      {stat.tone === "positive" && "↑ "}
-                      {stat.tone === "negative" && "↓ "}
-                      {stat.sub}
-                    </p>
+                  <span className="font-display text-[11px] font-semibold uppercase tracking-wider">
+                    {stage.title}
+                  </span>
+                  <span className="font-display text-[15px] font-bold">
+                    {nf(stage.value)}
+                  </span>
+                  {stage.percent < 100 && (
+                    <span className="text-[10px] opacity-80">
+                      {stage.percent}% retained
+                    </span>
                   )}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
-            <p className="eyebrow text-muted-foreground">
-              Acquisition mix vs industry
-            </p>
-            <div className="mt-4 space-y-3">
-              {CHANNEL_MIX.map((channel) => (
+                </span>
+              </button>
+
+              {open && (
                 <div
-                  key={channel.label}
-                  className="flex items-center justify-between gap-3"
+                  id={`funnel-panel-${stage.id}`}
+                  className="animate-in fade-in-0 slide-in-from-top-1 my-2 rounded-2xl border p-4 duration-200"
+                  style={{
+                    borderColor: `color-mix(in oklab, ${stage.color} 40%, transparent)`,
+                    background: `color-mix(in oklab, ${stage.color} 8%, transparent)`,
+                  }}
                 >
-                  <div className="flex items-center gap-2 text-sm">
+                  <p className="eyebrow" style={{ color: stage.color }}>
+                    {stage.title} · the data behind
+                  </p>
+                  <div className="mt-3 flex items-baseline gap-2">
                     <span
-                      className="h-2.5 w-2.5 rounded-full"
-                      style={{
-                        backgroundColor:
-                          channel.label === "Organic Search"
-                            ? "var(--brand-blue)"
-                            : channel.label === "Paid Search"
-                              ? "var(--brand-orange)"
-                              : channel.label === "Social"
-                                ? "var(--brand-lime)"
-                                : "var(--brand-amber)",
-                      }}
-                    />
-                    {channel.label}
-                  </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <span className="font-semibold">{channel.value}%</span>
-                    <span
-                      className={`text-xs ${channel.tone === "positive" ? "text-success" : channel.tone === "negative" ? "text-destructive" : "text-muted-foreground"}`}
+                      className="font-display text-4xl font-bold"
+                      style={{ color: stage.color }}
                     >
-                      {channel.tone === "positive"
-                        ? "↑"
-                        : channel.tone === "negative"
-                          ? "↓"
-                          : "→"}{" "}
-                      {channel.target}%
+                      {nf(stage.value)}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      {stage.label}
                     </span>
                   </div>
-                </div>
-              ))}
-            </div>
-            <p className="mt-4 text-xs text-muted-foreground">
-              Click any channel in the full diagnostic for the verdict and
-              action plan.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
-            <p className="eyebrow text-muted-foreground">
-              Where awareness starts
-            </p>
-            <div className="mt-4 space-y-3">
-              {AWARENESS_PAGES.map((page) => (
-                <div
-                  key={page.path}
-                  className="flex items-center justify-between gap-3 text-sm"
-                >
-                  <div className="min-w-0">
-                    <p className="truncate font-medium">{page.path}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {nf(page.total)} total · {nf(page.sessions)} sessions
+                  <p className="mt-1 text-sm" style={{ color: stage.color }}>
+                    {stage.sub}
+                  </p>
+                  <div className="mt-4 grid gap-3">
+                    {stage.stats.map((stat) => (
+                      <StatTile key={stat.label} stat={stat} />
+                    ))}
+                  </div>
+                  <div className="mt-4 rounded-xl border border-border bg-card/70 p-4">
+                    <p className="eyebrow text-muted-foreground">
+                      What SEO RADAR would do
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {STAGE_NOTES[stage.id]}
                     </p>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold">{nf(page.channelValue)}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {page.channel}
-                    </p>
-                  </div>
+                  {next && (
+                    <button
+                      type="button"
+                      onClick={() => openStage(i + 1)}
+                      className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold"
+                      style={{ color: next.color }}
+                    >
+                      Next stage: {next.title}
+                      <ArrowDown className="h-4 w-4" />
+                    </button>
+                  )}
                 </div>
-              ))}
+              )}
             </div>
-          </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function StatTile({
+  stat,
+  large = false,
+}: {
+  stat: Stage["stats"][number];
+  large?: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-xl border border-border bg-card transition-colors hover:bg-secondary/50 ${large ? "p-4" : "p-3"}`}
+    >
+      <p className={`font-display font-bold ${large ? "text-2xl" : "text-xl"}`}>
+        {stat.value}
+      </p>
+      <p className={`mt-1 text-muted-foreground ${large ? "text-sm" : "text-xs"}`}>
+        {stat.label}
+      </p>
+      {stat.sub && (
+        <p
+          className={`mt-1 ${large ? "text-sm" : "text-xs"} ${stat.tone === "positive" ? "text-success" : stat.tone === "negative" ? "text-destructive" : "text-muted-foreground"}`}
+        >
+          {stat.tone === "positive" && "↑ "}
+          {stat.tone === "negative" && "↓ "}
+          {stat.sub}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function StageDataCard({ stage, hint }: { stage: Stage; hint: string }) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="eyebrow" style={{ color: stage.color }}>
+            {stage.title} · the data behind
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">{hint}</p>
+        </div>
+        <div
+          className="rounded-full p-2"
+          style={{
+            backgroundColor: `color-mix(in oklab, ${stage.color} 12%, transparent)`,
+          }}
+        >
+          <Target className="h-4 w-4" style={{ color: stage.color }} />
         </div>
       </div>
-      <div className="mt-8 flex items-center gap-3 rounded-2xl border border-accent/30 bg-accent/10 p-4">
-        <CircleArrowRight className="h-5 w-5 shrink-0 text-accent" />
-        <p className="text-sm text-muted-foreground">
-          <span className="font-semibold text-accent">Biggest leak:</span>{" "}
-          Unaware to Problem Aware is losing 71.6% of the addressable audience.
-          SEO RADAR would recommend problem-led content, category entry pages
-          and awareness campaigns to pull buyers into the funnel.
+      <div className="mt-6">
+        <div className="flex items-baseline gap-3">
+          <span
+            className="font-display text-5xl font-bold"
+            style={{ color: stage.color }}
+          >
+            {nf(stage.value)}
+          </span>
+          <span className="text-base text-muted-foreground">{stage.label}</span>
+        </div>
+        <p className="mt-2 text-base" style={{ color: stage.color }}>
+          {stage.sub}
         </p>
       </div>
-      <OpportunitiesTable />
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        {stage.stats.map((stat) => (
+          <StatTile key={stat.label} stat={stat} large />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ChannelMixCard({ className = "" }: { className?: string }) {
+  return (
+    <div className={`rounded-2xl border border-border bg-card p-5 sm:p-6 ${className}`}>
+      <p className="eyebrow text-muted-foreground">Acquisition mix vs industry</p>
+      <div className="mt-4 space-y-3">
+        {CHANNEL_MIX.map((channel) => (
+          <div
+            key={channel.label}
+            className="flex items-center justify-between gap-3"
+          >
+            <div className="flex items-center gap-2 text-sm">
+              <span
+                className="h-2.5 w-2.5 rounded-full"
+                style={{
+                  backgroundColor:
+                    channel.label === "Organic Search"
+                      ? "var(--brand-blue)"
+                      : channel.label === "Paid Search"
+                        ? "var(--brand-orange)"
+                        : channel.label === "Social"
+                          ? "var(--brand-lime)"
+                          : "var(--brand-amber)",
+                }}
+              />
+              {channel.label}
+            </div>
+            <div className="flex items-center gap-3 text-sm">
+              <span className="font-semibold">{channel.value}%</span>
+              <span
+                className={`text-xs ${channel.tone === "positive" ? "text-success" : channel.tone === "negative" ? "text-destructive" : "text-muted-foreground"}`}
+              >
+                {channel.tone === "positive"
+                  ? "↑"
+                  : channel.tone === "negative"
+                    ? "↓"
+                    : "→"}{" "}
+                {channel.target}%
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="mt-4 text-xs text-muted-foreground">
+        Click any channel in the full diagnostic for the verdict and action
+        plan.
+      </p>
+    </div>
+  );
+}
+
+function BiggestLeakBanner({ className = "" }: { className?: string }) {
+  return (
+    <div
+      className={`flex items-center gap-4 rounded-2xl border border-accent/30 bg-accent/10 px-6 py-5 ${className}`}
+    >
+      <CircleArrowRight className="h-6 w-6 shrink-0 text-accent" />
+      <p className="text-base leading-relaxed text-muted-foreground">
+        <span className="font-semibold text-accent">Biggest leak:</span>{" "}
+        Unaware to Problem Aware is losing 71.6% of the addressable audience.
+        SEO RADAR would recommend problem-led content, category entry pages
+        and awareness campaigns to pull buyers into the funnel.
+      </p>
+    </div>
+  );
+}
+
+function AwarenessPagesCard() {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
+      <p className="eyebrow text-muted-foreground">Where awareness starts</p>
+      <div className="mt-4 space-y-3">
+        {AWARENESS_PAGES.map((page) => (
+          <div
+            key={page.path}
+            className="flex items-center justify-between gap-3 text-sm"
+          >
+            <div className="min-w-0">
+              <p className="truncate font-medium">{page.path}</p>
+              <p className="text-xs text-muted-foreground">
+                {nf(page.total)} total · {nf(page.sessions)} sessions
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="font-semibold">{nf(page.channelValue)}</p>
+              <p className="text-xs text-muted-foreground">{page.channel}</p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

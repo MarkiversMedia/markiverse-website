@@ -69,6 +69,7 @@
   --animate-car-finish: car-finish 7s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   --animate-car-rumble: car-rumble 0.18s linear infinite;
   --animate-caret-blink: caret-blink 1.25s ease-out infinite;
+  --animate-funnel-nudge: funnel-nudge 2.4s ease-in-out 3;
 
   @keyframes marquee {
     0% { transform: translate(0); }
@@ -121,6 +122,12 @@
     0%, 70%, to { opacity: 1; }
     20%, 50% { opacity: 0; }
   }
+  /* Mobile funnel accordion "tap me" wave — each layer plays this with a
+     staggered delay so the highlight runs top → bottom. */
+  @keyframes funnel-nudge {
+    0%, 45%, to { transform: scale(1); filter: brightness(1); }
+    18% { transform: scale(1.05); filter: brightness(1.15); }
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -162,6 +169,24 @@
 
   /* Base colour every drop-shadow/flood is mixed from (the "ink" navy). */
   --ink-shadow: oklch(22% 0.03 250);
+
+  /* The Golden Funnel (cosmic-funnel.tsx). Deliberate art-direction palette:
+     one indigo → violet → fuchsia → rose gradient flows through the tiers;
+     the hovered tier is spotlit in champagne gold. Themes may override. */
+  --funnel-1: #1e1b4b;
+  --funnel-2: #3730a3;
+  --funnel-3: #7c3aed;
+  --funnel-4: #c026d3;
+  --funnel-5: #e11d48;
+  --funnel-depth: #020617;
+  --funnel-rim: #06b6d4;
+  --funnel-ink: #ffffff;
+  --funnel-gold-1: #fffbeb;
+  --funnel-gold-2: #fef3c7;
+  --funnel-gold-3: #fcd34d;
+  --funnel-gold-rim: #f59e0b;
+  --funnel-gold-halo: rgba(251, 191, 36, 0.7);
+  --funnel-gold-ink: #451a03;
 
   /* Derived — these compose from the tokens above, so themes rarely need to
      override them. */
