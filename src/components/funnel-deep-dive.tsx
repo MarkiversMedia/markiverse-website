@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowDown, CircleArrowRight, Target } from "lucide-react";
+import { ArrowDown, CircleArrowRight, Sparkles, Target } from "lucide-react";
 import { CosmicFunnel, CosmicTier } from "./cosmic-funnel";
 
 type Tone = "positive" | "negative" | "neutral";
@@ -513,6 +513,28 @@ function OpportunitiesTable() {
   );
 }
 
+/* Caps "try me" badge: pulsing dot + sparkle, sits right on top of the funnel. */
+function FunnelHint({
+  verb,
+  className = "",
+}: {
+  verb: string;
+  className?: string;
+}) {
+  return (
+    <span
+      className={`inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 eyebrow text-accent ${className}`}
+    >
+      <span className="relative flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+      </span>
+      {verb} a stage · watch the funnel light up
+      <Sparkles className="h-3.5 w-3.5" />
+    </span>
+  );
+}
+
 export function FunnelDeepDive() {
   const [active, setActive] = useState(STAGES[0]);
   const activate = (id: string) => {
@@ -547,6 +569,7 @@ export function FunnelDeepDive() {
       {/* Mobile / tablet: the funnel itself is an accordion — tap a layer to
           unfold its data right beneath it. */}
       <div className="mt-8 flex flex-col gap-4 lg:hidden">
+        <FunnelHint verb="Tap" className="self-center" />
         <FunnelAccordion />
         <ChannelMixCard />
         <AwarenessPagesCard />
@@ -556,6 +579,7 @@ export function FunnelDeepDive() {
       {/* Desktop: interactive SVG funnel + side panel driven by hover */}
       <div className="mt-10 hidden gap-8 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
         <div className="flex h-full flex-col rounded-2xl border border-border bg-card p-4 sm:p-6">
+          <FunnelHint verb="Mouse over" className="mb-4 self-center" />
           <div className="flex flex-1 items-start justify-center">
             <CosmicFunnel
               className="h-auto w-full max-w-[470px]"
