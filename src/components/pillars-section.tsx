@@ -143,7 +143,9 @@ export function PillarsSection() {
               revenue, and intelligence rewires all of it.
             </p>
           </div>
-          <figure className="surface-card overflow-hidden rounded-[1.75rem] p-3">
+          {/* On desktop the video lives behind the hub below; here it's the
+              mobile/tablet visual only. */}
+          <figure className="surface-card overflow-hidden rounded-[1.75rem] p-3 lg:hidden">
             <video
               src="/assets/f1-strategist-sketch.mp4"
               poster="/assets/f1-strategist-poster.jpg"
@@ -240,8 +242,25 @@ function PillarHub({
   const hex = NODE_POS.map((p) => `${p.x},${p.y}`).join(" ");
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="relative mx-auto aspect-square w-full max-w-[440px]">
+    <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border">
+      {/* Background: the strategist video, ghosted under the hub */}
+      <video
+        src="/assets/f1-strategist-sketch.mp4"
+        poster="/assets/f1-strategist-poster.jpg"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--card)_78%,transparent),color-mix(in_oklab,var(--card)_88%,transparent))]"
+      />
+      <div className="relative z-10 flex h-full flex-col justify-center px-6 py-8">
+      <div className="relative mx-auto aspect-square w-full max-w-[400px]">
         {/* Lines */}
         <svg
           viewBox="0 0 100 100"
@@ -375,10 +394,11 @@ function PillarHub({
           );
         })}
       </div>
-      <p className="mx-auto mt-4 max-w-[360px] text-center text-xs leading-relaxed text-muted-foreground">
+      <p className="mx-auto mt-5 max-w-[360px] text-center text-xs leading-relaxed text-muted-foreground">
         One client at the centre, six systems working on it at once. Hover any
         pillar to see what we run there.
       </p>
+      </div>
     </div>
   );
 }
