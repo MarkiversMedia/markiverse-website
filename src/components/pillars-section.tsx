@@ -133,13 +133,13 @@ export function PillarsSection() {
               </span>
             </h2>
             <p className="mt-5 max-w-2xl text-lg text-muted-foreground lg:hidden">
-              Each pillar stands on its own. Together they compound — strategy
+              Each pillar stands on its own. Together they compound. Strategy
               informs experience, experience feeds demand, demand fuels
               revenue, and intelligence rewires all of it.
             </p>
           </div>
           <p className="hidden max-w-xl text-lg text-muted-foreground lg:block lg:pb-1">
-            Each pillar stands on its own. Together they compound — strategy
+            Each pillar stands on its own. Together they compound. Strategy
             informs experience, experience feeds demand, demand fuels revenue,
             and intelligence rewires all of it.
           </p>
