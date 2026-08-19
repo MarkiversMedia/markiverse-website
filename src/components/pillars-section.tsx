@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import {
   BrainCircuit,
@@ -8,6 +8,7 @@ import {
   Layers,
   Megaphone,
   Palette,
+  Sparkles,
   Workflow,
   type LucideIcon,
 } from "lucide-react";
@@ -94,7 +95,6 @@ const PILLARS: Pillar[] = [
 
 export function PillarsSection() {
   const [active, setActive] = useState(0);
-  const pillar = PILLARS[active] ?? PILLARS[0];
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Mobile accordion: open the tapped pillar and bring it to the top of the
@@ -201,8 +201,8 @@ export function PillarsSection() {
         </div>
 
         {/* Desktop: tab list + detail panel */}
-        <div className="surface-card mt-14 hidden gap-8 rounded-[2rem] p-10 lg:grid lg:grid-cols-[340px_1fr]">
-          <div className="flex flex-col gap-3">
+        <div className="surface-card mt-14 hidden items-stretch gap-8 rounded-[2rem] p-10 lg:grid lg:grid-cols-[340px_1fr]">
+          <div className="flex h-full flex-col gap-3">
             {PILLARS.map((p, i) => (
               <button
                 key={p.id}
@@ -221,14 +221,16 @@ export function PillarsSection() {
               </button>
             ))}
           </div>
-          <PillarDetail pillar={pillar} />
+          <PillarDesktopPanel active={active} />
         </div>
       </div>
     </section>
   );
 }
 
-function PillarDetail({
+/* ---------- Detail sections ---------- */
+
+function PillarIntro({
   pillar,
   compact = false,
 }: {
@@ -238,37 +240,123 @@ function PillarDetail({
   return (
     <div>
       {!compact && (
-        <div className="flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center rounded-xl bg-accent text-accent-foreground">
-            <pillar.icon className="h-5 w-5" />
-          </span>
-          <div>
-            <p className="eyebrow text-accent">Pillar {pillar.n}</p>
-            <h3 className="font-display text-2xl font-bold">{pillar.name}</h3>
-          </div>
-        </div>
+        <p className="eyebrow text-accent">
+          Pillar {pillar.n} · {pillar.name}
+        </p>
       )}
-      <p
-        className={`font-display text-xl font-semibold sm:text-2xl ${compact ? "" : "mt-6"}`}
+      <h3
+        className={`font-display text-xl font-semibold sm:text-2xl ${compact ? "" : "mt-3"}`}
       >
         {pillar.promise}
-      </p>
-      <p className="mt-4 max-w-2xl text-muted-foreground">{pillar.body}</p>
-      <div className="mt-7 flex flex-wrap items-center gap-2">
-        {pillar.chain.map((step, i) => (
-          <span key={step} className="flex items-center gap-2">
-            <span className="rounded-full border border-border bg-secondary/60 px-3.5 py-1.5 text-sm">
-              {step}
-            </span>
-            {i < pillar.chain.length - 1 && (
-              <span className="text-accent">→</span>
-            )}
-          </span>
+      </h3>
+      <p className="mt-3 max-w-2xl text-muted-foreground">{pillar.body}</p>
+    </div>
+  );
+}
+
+/* Services: a clean list, not a process chain */
+function PillarServices({ pillar }: { pillar: Pillar }) {
+  return (
+    <div>
+      <p className="eyebrow text-muted-foreground">What we deliver</p>
+      <ul className="mt-3 grid grid-cols-2 gap-x-8 gap-y-2.5 lg:grid-cols-3">
+        {pillar.chain.map((step) => (
+          <li
+            key={step}
+            className="flex items-center gap-2.5 text-sm font-medium text-foreground"
+          >
+            <span
+              aria-hidden="true"
+              className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+            />
+            {step}
+          </li>
         ))}
+      </ul>
+    </div>
+  );
+}
+
+/* AI layer: quiet footer line */
+function PillarAI({ pillar }: { pillar: Pillar }) {
+  return (
+    <div className="flex items-start gap-3">
+      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent/10 text-accent">
+        <Sparkles className="h-3.5 w-3.5" />
+      </span>
+      <p className="text-sm text-muted-foreground">
+        <span className="font-semibold text-foreground">AI layer. </span>
+        {pillar.ai}
+      </p>
+    </div>
+  );
+}
+
+/* Mobile accordion body: sections in sequence, natural height */
+function PillarDetail({
+  pillar,
+  compact = false,
+}: {
+  pillar: Pillar;
+  compact?: boolean;
+}) {
+  return (
+    <div>
+      <PillarIntro pillar={pillar} compact={compact} />
+      <div className="mt-7 border-t border-border pt-5">
+        <PillarServices pillar={pillar} />
       </div>
-      <div className="mt-8 rounded-xl border border-accent/25 bg-accent/10 p-5">
-        <p className="eyebrow text-accent">AI layer</p>
-        <p className="mt-2 text-sm text-muted-foreground">{pillar.ai}</p>
+      <div className="mt-7 border-t border-border pt-5">
+        <PillarAI pillar={pillar} />
+      </div>
+    </div>
+  );
+}
+
+/* Desktop panel: each section is stacked across ALL six pillars in one grid
+   cell, so every section takes the height of its tallest variant. Result:
+   the dividers, the services block and the AI line sit at fixed positions
+   and nothing inside the box shifts when you switch tabs. */
+function PillarStack({
+  active,
+  render,
+}: {
+  active: number;
+  render: (pillar: Pillar) => ReactNode;
+}) {
+  return (
+    <div className="grid">
+      {PILLARS.map((p, i) => {
+        const isActive = i === active;
+        return (
+          <div
+            key={p.id}
+            aria-hidden={!isActive}
+            className={`col-start-1 row-start-1 ${isActive ? "" : "invisible pointer-events-none"}`}
+          >
+            {render(p)}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function PillarDesktopPanel({ active }: { active: number }) {
+  return (
+    <div className="flex h-full min-w-0 flex-col rounded-2xl border border-border bg-card p-8">
+      <PillarStack active={active} render={(p) => <PillarIntro pillar={p} />} />
+      <div className="mt-7 border-t border-border pt-5">
+        <PillarStack
+          active={active}
+          render={(p) => <PillarServices pillar={p} />}
+        />
+      </div>
+      {/* pinned to the bottom so the box fills the tab column's height */}
+      <div className="mt-auto pt-7">
+        <div className="border-t border-border pt-5">
+          <PillarStack active={active} render={(p) => <PillarAI pillar={p} />} />
+        </div>
       </div>
     </div>
   );
