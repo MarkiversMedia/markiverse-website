@@ -34,7 +34,7 @@ const GEARS = [
 
 export function EngineSection() {
   return (
-    <section id="engine" className="relative overflow-hidden py-24 sm:py-32">
+    <section id="engine" className="relative overflow-hidden pt-14 pb-20 sm:pt-16 sm:pb-24">
       <DriftOrbs className="opacity-70" />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-[1fr_1fr]">

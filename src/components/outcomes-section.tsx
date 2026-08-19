@@ -26,7 +26,7 @@ export function OutcomesSection() {
   return (
     <section
       id="outcomes"
-      className="relative overflow-x-clip border-y border-border bg-[color-mix(in_oklab,var(--ink)_60%,transparent)] py-24 sm:py-32"
+      className="relative overflow-x-clip border-y border-border bg-[color-mix(in_oklab,var(--ink)_60%,transparent)] pt-14 pb-20 sm:pt-16 sm:pb-24"
     >
       <DriftOrbs />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
