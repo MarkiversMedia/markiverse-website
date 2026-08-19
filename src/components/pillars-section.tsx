@@ -339,20 +339,6 @@ function PillarHub({
           })}
         </svg>
 
-        {/* Centre: the client */}
-        <div className="absolute left-1/2 top-1/2 flex h-[34%] w-[34%] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border border-foreground/25 bg-transparent text-center">
-          <motion.span
-            aria-hidden="true"
-            className="absolute inset-0 rounded-full border border-accent/30"
-            animate={reduce ? undefined : { scale: [1, 1.18, 1], opacity: [0.7, 0, 0.7] }}
-            transition={{ duration: 3.2, ease: "easeInOut", repeat: Infinity }}
-          />
-          <span className="eyebrow text-muted-foreground">Built around</span>
-          <span className="mt-1 font-display text-lg font-bold leading-tight">
-            your growth
-          </span>
-        </div>
-
         {/* Nodes */}
         {PILLARS.map((p, i) => {
           const pos = NODE_POS[i];
@@ -394,7 +380,7 @@ function PillarHub({
           );
         })}
       </div>
-      <p className="mx-auto mt-5 max-w-[380px] rounded-xl bg-card/55 px-4 py-2 text-center text-xs leading-relaxed text-foreground/75 backdrop-blur-[2px]">
+      <p className="mx-auto mt-5 max-w-[400px] rounded-xl border border-border bg-card/90 px-5 py-3 text-center font-display text-sm font-semibold leading-snug text-foreground shadow-sm backdrop-blur-sm">
         One client at the centre, six systems working on it at once. Hover any
         pillar to see what we run there.
       </p>
