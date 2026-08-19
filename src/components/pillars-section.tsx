@@ -257,7 +257,7 @@ function PillarHub({
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--card)_78%,transparent),color-mix(in_oklab,var(--card)_88%,transparent))]"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--card)_35%,transparent),color-mix(in_oklab,var(--card)_55%,transparent))]"
       />
       <div className="relative z-10 flex h-full flex-col justify-center px-6 py-8">
       <div className="relative mx-auto aspect-square w-full max-w-[400px]">
@@ -277,7 +277,7 @@ function PillarHub({
             strokeWidth="1"
             strokeDasharray="1.2 2.4"
             vectorEffect="non-scaling-stroke"
-            className="text-border"
+            className="text-foreground/[0.07]"
             style={{ transformOrigin: "50% 50%" }}
             animate={reduce ? undefined : { rotate: 360 }}
             transition={{ duration: 90, ease: "linear", repeat: Infinity }}
@@ -289,7 +289,7 @@ function PillarHub({
             stroke="currentColor"
             strokeWidth="1"
             vectorEffect="non-scaling-stroke"
-            className="text-border"
+            className="text-foreground/[0.07]"
           />
           {/* spokes to the client */}
           {NODE_POS.map((p, i) => {
@@ -304,7 +304,7 @@ function PillarHub({
                   stroke="currentColor"
                   strokeWidth="1"
                   vectorEffect="non-scaling-stroke"
-                  className="text-border"
+                  className="text-foreground/[0.07]"
                 />
                 {isActive && (
                   <motion.line
@@ -340,7 +340,7 @@ function PillarHub({
         </svg>
 
         {/* Centre: the client */}
-        <div className="absolute left-1/2 top-1/2 flex h-[34%] w-[34%] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border border-border bg-card text-center shadow-[0_8px_30px_-12px_rgba(0,0,0,0.25)]">
+        <div className="absolute left-1/2 top-1/2 flex h-[34%] w-[34%] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border border-border/60 bg-card/55 text-center shadow-[0_8px_30px_-12px_rgba(0,0,0,0.2)] backdrop-blur-[2px]">
           <motion.span
             aria-hidden="true"
             className="absolute inset-0 rounded-full border border-accent/30"
@@ -368,8 +368,8 @@ function PillarHub({
               suppressHydrationWarning
               className={`absolute z-10 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full border py-1.5 pl-1.5 pr-3.5 font-display text-sm font-semibold shadow-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-accent/60 ${
                 isActive
-                  ? "border-accent bg-accent text-accent-foreground"
-                  : "border-border bg-card text-muted-foreground hover:border-accent/40 hover:text-foreground"
+                  ? "border-accent/80 bg-accent/85 text-accent-foreground backdrop-blur-[2px]"
+                  : "border-border/60 bg-card/40 text-foreground/80 backdrop-blur-[2px] hover:border-accent/40 hover:bg-card/60 hover:text-foreground"
               }`}
               style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
               animate={{ scale: isActive ? 1.08 : 1 }}
@@ -385,7 +385,7 @@ function PillarHub({
                 />
               )}
               <span
-                className={`grid h-7 w-7 shrink-0 place-items-center rounded-full ${isActive ? "bg-accent-foreground/15" : "bg-secondary"}`}
+                className={`grid h-7 w-7 shrink-0 place-items-center rounded-full ${isActive ? "bg-accent-foreground/15" : "bg-foreground/[0.06]"}`}
               >
                 <p.icon className="h-3.5 w-3.5" />
               </span>
@@ -394,7 +394,7 @@ function PillarHub({
           );
         })}
       </div>
-      <p className="mx-auto mt-5 max-w-[360px] text-center text-xs leading-relaxed text-muted-foreground">
+      <p className="mx-auto mt-5 max-w-[380px] rounded-xl bg-card/55 px-4 py-2 text-center text-xs leading-relaxed text-foreground/75 backdrop-blur-[2px]">
         One client at the centre, six systems working on it at once. Hover any
         pillar to see what we run there.
       </p>
