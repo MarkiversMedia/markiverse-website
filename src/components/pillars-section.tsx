@@ -340,7 +340,7 @@ function PillarHub({
         </svg>
 
         {/* Centre: the client */}
-        <div className="absolute left-1/2 top-1/2 flex h-[34%] w-[34%] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border border-border/60 bg-card/55 text-center shadow-[0_8px_30px_-12px_rgba(0,0,0,0.2)] backdrop-blur-[2px]">
+        <div className="absolute left-1/2 top-1/2 flex h-[34%] w-[34%] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border border-foreground/25 bg-transparent text-center">
           <motion.span
             aria-hidden="true"
             className="absolute inset-0 rounded-full border border-accent/30"
@@ -366,10 +366,10 @@ function PillarHub({
               onFocus={() => onSelect(i)}
               aria-pressed={isActive}
               suppressHydrationWarning
-              className={`absolute z-10 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full border py-1.5 pl-1.5 pr-3.5 font-display text-sm font-semibold shadow-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-accent/60 ${
+              className={`absolute z-10 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full border py-1.5 pl-1.5 pr-3.5 font-display text-sm font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-accent/60 ${
                 isActive
                   ? "border-accent/80 bg-accent/85 text-accent-foreground backdrop-blur-[2px]"
-                  : "border-border/60 bg-card/40 text-foreground/80 backdrop-blur-[2px] hover:border-accent/40 hover:bg-card/60 hover:text-foreground"
+                  : "border-foreground/25 bg-transparent text-foreground hover:border-accent/60"
               }`}
               style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
               animate={{ scale: isActive ? 1.08 : 1 }}
@@ -385,7 +385,7 @@ function PillarHub({
                 />
               )}
               <span
-                className={`grid h-7 w-7 shrink-0 place-items-center rounded-full ${isActive ? "bg-accent-foreground/15" : "bg-foreground/[0.06]"}`}
+                className={`grid h-7 w-7 shrink-0 place-items-center rounded-full ${isActive ? "bg-accent-foreground/15" : "bg-transparent"}`}
               >
                 <p.icon className="h-3.5 w-3.5" />
               </span>
