@@ -574,7 +574,22 @@ export function FunnelDeepDive() {
             end exactly on the bottom of "Acquisition mix"; the third card
             sits below the pair at full width. */}
         <div className="flex flex-col gap-4">
-          <StageDataCard stage={active} hint="Hover a stage to load" />
+          {/* All stage cards share one grid cell so the card keeps the height
+              of the tallest stage — switching stages never reflows the row. */}
+          <div className="grid">
+            {STAGES.map((stage) => {
+              const isActive = stage.id === active.id;
+              return (
+                <div
+                  key={stage.id}
+                  aria-hidden={!isActive}
+                  className={`col-start-1 row-start-1 ${isActive ? "" : "invisible pointer-events-none"}`}
+                >
+                  <StageDataCard stage={stage} hint="Hover a stage to load" />
+                </div>
+              );
+            })}
+          </div>
           <BiggestLeakBanner className="flex-1" />
         </div>
         {/* Row 2: acquisition mix under the funnel, awareness pages under
@@ -759,7 +774,7 @@ function StatTile({
 
 function StageDataCard({ stage, hint }: { stage: Stage; hint: string }) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+    <div className="h-full rounded-2xl border border-border bg-card p-6 sm:p-8">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="eyebrow" style={{ color: stage.color }}>
