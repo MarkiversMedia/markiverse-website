@@ -42,7 +42,7 @@ const PILLARS: Pillar[] = [
     name: "Experience",
     icon: Layers,
     promise: "Every touchpoint feels like it was built for that one buyer.",
-    body: "Brand systems, websites and product-grade UX that carry the story from first impression to signed contract â€” with personalisation that adapts to industry, role and intent.",
+    body: "Brand systems, websites and product-grade UX that carry the story from first impression to signed contract — with personalisation that adapts to industry, role and intent.",
     chain: ["Brand", "Website", "UX", "Digital experience", "Personalisation"],
     ai: "Real-time intent models reshape hero copy, proof and CTAs per visitor segment.",
   },
@@ -51,10 +51,10 @@ const PILLARS: Pillar[] = [
     n: "03",
     name: "Demand",
     icon: Megaphone,
-    promise: "Be the answer â€” in search, in AI, and in the inbox.",
+    promise: "Be the answer — in search, in AI, and in the inbox.",
     body: "SEO and GEO so AI engines recommend you, paid that compounds instead of leaking, ABM for the accounts that matter, and content plus outbound working the same list.",
     chain: ["SEO", "GEO", "Paid", "ABM", "Campaigns", "Content", "Outbound"],
-    ai: "We track how ChatGPT, Gemini, Perplexity and AI Overviews describe your brand â€” weekly â€” and close the gaps.",
+    ai: "We track how ChatGPT, Gemini, Perplexity and AI Overviews describe your brand — weekly — and close the gaps.",
   },
   {
     id: "revenue",
@@ -87,7 +87,7 @@ const PILLARS: Pillar[] = [
     n: "06",
     name: "Creative",
     icon: Palette,
-    promise: "Work that is impossible to scroll past â€” and easy to remember.",
+    promise: "Work that is impossible to scroll past — and easy to remember.",
     body: "Brand identity, design systems, video and storytelling built for the platforms your buyers actually live on, produced at campaign speed.",
     chain: ["Brand", "Design", "Video", "Storytelling", "Campaigns"],
     ai: "Generative tooling multiplies variants; our strategists and directors decide what ships.",
@@ -112,12 +112,14 @@ export function PillarsSection() {
   };
 
   return (
-    <section id="pillars" className="relative py-24 sm:py-32">
+    <section id="pillars" className="relative py-24 sm:py-32 lg:py-10">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="grid items-center gap-10 lg:grid-cols-2">
+        {/* Header: heading left, intro right on desktop so the whole section
+            (header + panel) fits one desktop viewport. */}
+        <div className="grid items-center gap-10 lg:grid-cols-[3fr_2fr] lg:items-end lg:gap-12">
           <div className="min-w-0">
             <p className="eyebrow text-accent">The operating model</p>
-            <h2 className="mt-4 max-w-3xl heading-h2">
+            <h2 className="mt-4 max-w-3xl heading-h2 lg:max-w-none">
               Most agencies sell services.
               <br />
               <span className="heading-accent text-accent">
@@ -130,12 +132,17 @@ export function PillarsSection() {
                 connected systems.
               </span>
             </h2>
-            <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-              Each pillar stands on its own. Together they compound â€” strategy
+            <p className="mt-5 max-w-2xl text-lg text-muted-foreground lg:hidden">
+              Each pillar stands on its own. Together they compound — strategy
               informs experience, experience feeds demand, demand fuels
               revenue, and intelligence rewires all of it.
             </p>
           </div>
+          <p className="hidden max-w-xl text-lg text-muted-foreground lg:block lg:pb-1">
+            Each pillar stands on its own. Together they compound — strategy
+            informs experience, experience feeds demand, demand fuels revenue,
+            and intelligence rewires all of it.
+          </p>
           {/* On desktop the video lives behind the hub below; here it's the
               mobile/tablet visual only. */}
           <figure className="surface-card overflow-hidden rounded-[1.75rem] p-3 lg:hidden">
@@ -153,12 +160,12 @@ export function PillarsSection() {
               className="w-full rounded-[1.25rem] object-cover"
             />
             <figcaption className="eyebrow px-2 pb-1 pt-3 text-muted-foreground">
-              The strategist on the mic â€” six pillars, one clear call
+              The strategist on the mic — six pillars, one clear call
             </figcaption>
           </figure>
         </div>
 
-        {/* Mobile / tablet: accordion â€” every pillar visible, one open at a time */}
+        {/* Mobile / tablet: accordion — every pillar visible, one open at a time */}
         <div className="surface-card mt-14 rounded-[2rem] p-3 lg:hidden">
           {PILLARS.map((p, i) => {
             const open = i === active;
@@ -184,7 +191,7 @@ export function PillarsSection() {
                     <p.icon className="h-4 w-4" />
                   </span>
                   <span className="flex-1 font-display text-base font-semibold">
-                    {p.n} Â· {p.name}
+                    {p.n} · {p.name}
                   </span>
                   <ChevronDown
                     className={`h-4 w-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
@@ -213,7 +220,7 @@ export function PillarsSection() {
         </div>
 
         {/* Desktop: hub + detail panel */}
-        <div className="surface-card mt-12 hidden items-stretch gap-6 rounded-[2rem] p-6 lg:grid lg:grid-cols-[400px_1fr]">
+        <div className="surface-card mt-6 hidden items-stretch gap-5 rounded-[1.75rem] p-4 lg:grid lg:grid-cols-[380px_1fr]">
           <PillarVideo />
           <PillarDesktopPanel active={active} onSelect={setActive} />
         </div>
@@ -226,7 +233,7 @@ export function PillarsSection() {
 
 function PillarVideo() {
   return (
-    <figure className="relative h-full min-h-[360px] overflow-hidden rounded-2xl border border-border">
+    <figure className="relative h-full min-h-[320px] overflow-hidden rounded-2xl border border-border">
       <video
         src="/assets/f1-strategist-sketch.mp4"
         poster="/assets/f1-strategist-poster.jpg"
@@ -279,10 +286,10 @@ function PillarIntro({
       initial={false}
       animate={live ? "show" : "hidden"}
     >
-      <h3 className="font-display text-xl font-semibold leading-snug">
+      <h3 className="font-display text-xl font-semibold leading-snug lg:text-lg">
         {pillar.promise}
       </h3>
-      <p className="mt-2.5 text-[15px] leading-relaxed text-muted-foreground">
+      <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground lg:text-sm lg:leading-normal">
         {pillar.body}
       </p>
     </motion.div>
@@ -304,7 +311,7 @@ function PillarServices({
       animate={live ? "show" : "hidden"}
     >
       <p className="eyebrow text-muted-foreground">What we deliver</p>
-      <ul className="mt-2.5 grid grid-cols-2 gap-x-6 gap-y-2 lg:grid-cols-4">
+      <ul className="mt-2.5 grid grid-cols-2 gap-x-6 gap-y-2 lg:flex lg:flex-wrap lg:gap-x-7 lg:gap-y-1.5">
         {pillar.chain.map((step) => (
           <motion.li
             key={step}
@@ -368,7 +375,7 @@ function PillarDetail({ pillar }: { pillar: Pillar }) {
 /* Desktop panel: each section is stacked across ALL six pillars in one grid
    cell, so every section takes the height of its tallest variant. Result:
    the dividers, the services block and the AI line sit at fixed positions
-   and nothing inside the box shifts when you switch pillars â€” only the
+   and nothing inside the box shifts when you switch pillars — only the
    words animate in. */
 function PillarStack({
   active,
@@ -474,22 +481,22 @@ function PillarDesktopPanel({
   onSelect: (i: number) => void;
 }) {
   return (
-    <div className="flex h-full min-w-0 flex-col rounded-2xl border border-border bg-card px-7 py-6">
+    <div className="flex h-full min-w-0 flex-col rounded-2xl border border-border bg-card px-6 py-5">
       <PillarTrack active={active} onSelect={onSelect} />
-      <div className="mt-5 border-t border-border pt-5" />
+      <div className="mt-4 border-t border-border pt-4" />
       <PillarStack
         active={active}
         render={(p, live) => <PillarIntro pillar={p} live={live} />}
       />
-      <div className="mt-5 border-t border-border pt-4">
+      <div className="mt-4 border-t border-border pt-3">
         <PillarStack
           active={active}
           render={(p, live) => <PillarServices pillar={p} live={live} />}
         />
       </div>
       {/* pinned to the bottom so the box fills the video's height */}
-      <div className="mt-auto pt-5">
-        <div className="border-t border-border pt-4">
+      <div className="mt-auto pt-4">
+        <div className="border-t border-border pt-3">
           <PillarStack
             active={active}
             render={(p, live) => <PillarAI pillar={p} live={live} />}
