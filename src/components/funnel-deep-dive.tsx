@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDown, CircleArrowRight, Target } from "lucide-react";
-import { CosmicFunnel } from "./cosmic-funnel";
+import { CosmicFunnel, CosmicTier } from "./cosmic-funnel";
 
 type Tone = "positive" | "negative" | "neutral";
 
@@ -588,19 +588,14 @@ export function FunnelDeepDive() {
   );
 }
 
-/* Trapezoid widths (percent of the row) for the mobile funnel accordion —
-   the same silhouette as the desktop SVG. */
-const ACCORDION_TOP = [100, 82, 66, 52, 40];
-const ACCORDION_BOTTOM = [82, 66, 52, 40, 28];
-
-/* Mobile funnel accordion: each layer is a tappable trapezoid; the tapped
-   layer scrolls to the top of the viewport and unfolds its data beneath it.
-   One layer open at a time; tapping it again folds it. */
+/* Mobile funnel accordion: each layer is a tappable 3D tier (the MiniFunnel
+   recipe, one tier per row so data can unfold between layers). Tapping a
+   layer spotlights it gold, scrolls it to the top of the viewport and
+   unfolds that stage's data beneath it; tapping it again folds it. A "Next
+   stage" link walks down the funnel. Until the first tap the tiers play a
+   top→bottom nudge wave (once in view; never under prefers-reduced-motion). */
 function FunnelAccordion() {
   const [openId, setOpenId] = useState<string | null>(null);
-  // "Nudge": when the funnel scrolls into view, each layer lifts in turn from
-  // top to bottom (a few passes) to signal the layers are tappable. Stops on
-  // first tap; never starts under prefers-reduced-motion.
   const [nudging, setNudging] = useState(false);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -641,12 +636,9 @@ function FunnelAccordion() {
       <p className="eyebrow text-center text-muted-foreground">
         Tap a stage to unfold its data
       </p>
-      <div className="mt-4 flex flex-col gap-1.5">
+      <div className="mt-3 flex flex-col">
         {STAGES.map((stage, i) => {
           const open = openId === stage.id;
-          const tw = ACCORDION_TOP[i];
-          const bw = ACCORDION_BOTTOM[i];
-          const clip = `polygon(${(100 - tw) / 2}% 0, ${100 - (100 - tw) / 2}% 0, ${100 - (100 - bw) / 2}% 100%, ${(100 - bw) / 2}% 100%)`;
           const next = STAGES[i + 1];
           return (
             <div
@@ -654,7 +646,9 @@ function FunnelAccordion() {
               ref={(el) => {
                 rowRefs.current[i] = el;
               }}
-              className="scroll-mt-20"
+              // Tiers overlap slightly (rim on the lip above) unless a data
+              // panel is open between them.
+              className={`scroll-mt-20 ${i > 0 && openId !== STAGES[i - 1].id ? "-mt-6" : ""}`}
             >
               <button
                 type="button"
@@ -662,34 +656,27 @@ function FunnelAccordion() {
                 aria-expanded={open}
                 aria-controls={`funnel-panel-${stage.id}`}
                 suppressHydrationWarning
-                className="relative block w-full"
+                className="block w-full"
               >
-                <span
-                  className={`flex min-h-[4.5rem] w-full flex-col items-center justify-center px-2 text-center text-primary-foreground transition-[transform,filter] duration-200 ${open ? "scale-[1.04] brightness-110" : ""} ${nudging && !open ? "animate-funnel-nudge" : ""}`}
-                  style={{
-                    clipPath: clip,
-                    background: `linear-gradient(180deg, color-mix(in oklab, ${stage.color} 88%, white), ${stage.color})`,
-                    animationDelay: `${i * 0.22}s`,
+                <CosmicTier
+                  stage={{
+                    id: stage.id,
+                    title: stage.title,
+                    value: nf(stage.value),
+                    label: stage.label,
+                    sub: stage.percent < 100 ? `${stage.percent}% retained` : undefined,
                   }}
-                >
-                  <span className="font-display text-[11px] font-semibold uppercase tracking-wider">
-                    {stage.title}
-                  </span>
-                  <span className="font-display text-[15px] font-bold">
-                    {nf(stage.value)}
-                  </span>
-                  {stage.percent < 100 && (
-                    <span className="text-[10px] opacity-80">
-                      {stage.percent}% retained
-                    </span>
-                  )}
-                </span>
+                  index={i}
+                  count={STAGES.length}
+                  nudgeDelay={nudging && !open ? i * 0.22 : undefined}
+                  className="mx-auto block h-auto w-full max-w-[320px]"
+                />
               </button>
 
               {open && (
                 <div
                   id={`funnel-panel-${stage.id}`}
-                  className="animate-in fade-in-0 slide-in-from-top-1 my-2 rounded-2xl border p-4 duration-200"
+                  className="animate-in fade-in-0 slide-in-from-top-1 my-3 rounded-2xl border p-4 duration-200"
                   style={{
                     borderColor: `color-mix(in oklab, ${stage.color} 40%, transparent)`,
                     background: `color-mix(in oklab, ${stage.color} 8%, transparent)`,
@@ -705,9 +692,7 @@ function FunnelAccordion() {
                     >
                       {nf(stage.value)}
                     </span>
-                    <span className="text-sm text-muted-foreground">
-                      {stage.label}
-                    </span>
+                    <span className="text-sm text-muted-foreground">{stage.label}</span>
                   </div>
                   <p className="mt-1 text-sm" style={{ color: stage.color }}>
                     {stage.sub}
@@ -718,12 +703,8 @@ function FunnelAccordion() {
                     ))}
                   </div>
                   <div className="mt-4 rounded-xl border border-border bg-card/70 p-4">
-                    <p className="eyebrow text-muted-foreground">
-                      What SEO RADAR would do
-                    </p>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      {STAGE_NOTES[stage.id]}
-                    </p>
+                    <p className="eyebrow text-muted-foreground">What SEO RADAR would do</p>
+                    <p className="mt-2 text-sm text-muted-foreground">{STAGE_NOTES[stage.id]}</p>
                   </div>
                   {next && (
                     <button
