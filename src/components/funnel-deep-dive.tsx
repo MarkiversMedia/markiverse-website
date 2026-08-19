@@ -558,7 +558,7 @@ export function FunnelDeepDive() {
         <div className="flex h-full flex-col rounded-2xl border border-border bg-card p-4 sm:p-6">
           <div className="flex flex-1 items-start justify-center">
             <CosmicFunnel
-              className="h-auto w-full max-w-[560px]"
+              className="h-auto w-full max-w-[470px]"
               onActivate={activate}
               stages={STAGES.map((s) => ({
                 id: s.id,
@@ -774,7 +774,7 @@ function StatTile({
 
 function StageDataCard({ stage, hint }: { stage: Stage; hint: string }) {
   return (
-    <div className="h-full rounded-2xl border border-border bg-card p-6 sm:p-8">
+    <div className="h-full rounded-2xl border border-border bg-card p-6">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="eyebrow" style={{ color: stage.color }}>
@@ -791,23 +791,51 @@ function StageDataCard({ stage, hint }: { stage: Stage; hint: string }) {
           <Target className="h-4 w-4" style={{ color: stage.color }} />
         </div>
       </div>
-      <div className="mt-6">
+      <div className="mt-4">
         <div className="flex items-baseline gap-3">
           <span
-            className="font-display text-5xl font-bold"
+            className="font-display text-4xl font-bold"
             style={{ color: stage.color }}
           >
             {nf(stage.value)}
           </span>
-          <span className="text-base text-muted-foreground">{stage.label}</span>
+          <span className="text-sm text-muted-foreground">{stage.label}</span>
         </div>
-        <p className="mt-2 text-base" style={{ color: stage.color }}>
+        <p className="mt-1 text-sm" style={{ color: stage.color }}>
           {stage.sub}
         </p>
       </div>
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+      {/* Stats as horizontal rows: number left, label + delta right. Text
+          can lengthen or shorten without changing the card's height. */}
+      <div className="mt-4 divide-y divide-border border-t border-border">
         {stage.stats.map((stat) => (
-          <StatTile key={stat.label} stat={stat} large />
+          <div key={stat.label} className="flex items-center gap-4 py-2">
+            <p className="w-24 shrink-0 font-display text-xl font-bold tabular-nums">
+              {stat.value}
+            </p>
+            <div className="min-w-0">
+              <p className="truncate text-sm text-foreground">{stat.label}</p>
+              <p
+                className={`truncate text-xs ${
+                  stat.tone === "positive"
+                    ? "text-success"
+                    : stat.tone === "negative"
+                      ? "text-destructive"
+                      : "text-muted-foreground"
+                }`}
+              >
+                {stat.sub ? (
+                  <>
+                    {stat.tone === "positive" && "↑ "}
+                    {stat.tone === "negative" && "↓ "}
+                    {stat.sub}
+                  </>
+                ) : (
+                  " "
+                )}
+              </p>
+            </div>
+          </div>
         ))}
       </div>
     </div>
@@ -867,10 +895,10 @@ function ChannelMixCard({ className = "" }: { className?: string }) {
 function BiggestLeakBanner({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`flex items-center gap-4 rounded-2xl border border-accent/30 bg-accent/10 px-6 py-5 ${className}`}
+      className={`flex items-center gap-3 rounded-2xl border border-accent/30 bg-accent/10 px-5 py-4 ${className}`}
     >
-      <CircleArrowRight className="h-6 w-6 shrink-0 text-accent" />
-      <p className="text-base leading-relaxed text-muted-foreground">
+      <CircleArrowRight className="h-5 w-5 shrink-0 text-accent" />
+      <p className="text-sm leading-relaxed text-muted-foreground">
         <span className="font-semibold text-accent">Biggest leak:</span>{" "}
         Unaware to Problem Aware is losing 71.6% of the addressable audience.
         SEO RADAR would recommend problem-led content, category entry pages
