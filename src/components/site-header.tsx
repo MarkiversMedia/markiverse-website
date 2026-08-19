@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { SERVICES, TOOLS, INDUSTRIES } from "./site-data";
+import { ThemePicker } from "./theme-picker";
 
 type MenuId = "services" | "tools" | "industries";
 
@@ -57,7 +58,7 @@ export function SiteHeader() {
             alt="Markiverse"
             width={200}
             height={84}
-            className="h-14 w-auto"
+            className="h-14 w-auto dark:rounded-lg dark:bg-white dark:px-2 dark:py-1"
           />
         </a>
         <nav className="hidden items-center gap-7 lg:flex">
@@ -93,22 +94,23 @@ export function SiteHeader() {
             Join Us
           </a>
         </nav>
-        <div className="hidden lg:block">
+        <div className="flex items-center gap-3">
+          <ThemePicker />
           <a
             href="/contact"
-            className="inline-flex items-center rounded-full bg-[image:var(--gradient-accent)] px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-[var(--shadow-accent)] transition-transform hover:-translate-y-0.5"
+            className="hidden items-center rounded-full bg-[image:var(--gradient-accent)] px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-[var(--shadow-accent)] transition-transform hover:-translate-y-0.5 lg:inline-flex"
           >
             Book a growth review
           </a>
+          <button
+            className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full lg:hidden"
+            aria-label="Toggle navigation"
+            suppressHydrationWarning
+            onClick={() => setMobileOpen((open) => !open)}
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
-        <button
-          className="lg:hidden"
-          aria-label="Toggle navigation"
-          suppressHydrationWarning
-          onClick={() => setMobileOpen((open) => !open)}
-        >
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
       </div>
 
       {openMenu && (

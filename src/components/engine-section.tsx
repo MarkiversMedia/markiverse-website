@@ -63,7 +63,7 @@ export function EngineSection() {
               <div className="pt-2">
                 <a
                   href="#contact"
-                  className="inline-flex items-center gap-2 font-display font-bold text-accent transition-colors hover:opacity-80"
+                  className="inline-flex min-h-11 items-center gap-2 font-display font-bold text-accent transition-colors hover:opacity-80"
                 >
                   Know More About SEO RADAR <ArrowRight className="h-4 w-4" />
                 </a>

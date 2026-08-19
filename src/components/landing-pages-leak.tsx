@@ -138,7 +138,7 @@ export function LandingPagesLeak() {
               key={r}
               onClick={() => setRange(r)}
               suppressHydrationWarning
-              className={`rounded-full px-3 py-1 text-xs transition-colors ${range === r ? "bg-accent/15 font-semibold text-accent" : "text-muted-foreground hover:text-foreground"}`}
+              className={`min-h-9 rounded-full px-3 py-1 text-xs transition-colors sm:min-h-0 ${range === r ? "bg-accent/15 font-semibold text-accent" : "text-muted-foreground hover:text-foreground"}`}
             >
               {r}
             </button>

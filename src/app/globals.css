@@ -1,0 +1,553 @@
+/* Tailwind v4 source stylesheet — compiled by @tailwindcss/postcss at build
+   time (see postcss.config.mjs). Utilities are generated on demand from the
+   classes used in src/, so any Tailwind class works anywhere in the site.
+
+   The design tokens, base styles, custom utilities and keyframes below were
+   carried over from the previous pre-built markiverse.css. */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------------------
+   Design tokens (shadcn-style). The raw values live on :root below; this
+   block maps them onto Tailwind's namespaces so bg-accent, text-muted-
+   foreground, border-border, font-display, rounded-lg, animate-car-drive …
+   all resolve.
+   ------------------------------------------------------------------------- */
+@theme inline {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-amber: var(--brand-amber);
+  --color-brand-lime: var(--brand-lime);
+  --color-brand-green: var(--brand-green);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Named drop-shadows for the floating illustrations (drop-shadow-lift …).
+     All derive from --ink-shadow so a reskin changes them in one place. */
+  --drop-shadow-lift: 0 40px 50px color-mix(in oklab, var(--ink-shadow) 28%, transparent);
+  --drop-shadow-lift-sm: 0 25px 35px color-mix(in oklab, var(--ink-shadow) 30%, transparent);
+  --drop-shadow-float: 0 20px 40px color-mix(in oklab, var(--ink-shadow) 12%, transparent);
+
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-pulse-ring: pulse-ring 2.4s ease-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-outcome-burst: outcome-burst 7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  --animate-frame-fade: frame-fade 7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  --animate-car-drive: car-drive 7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  --animate-car-finish: car-finish 7s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  --animate-car-rumble: car-rumble 0.18s linear infinite;
+  --animate-caret-blink: caret-blink 1.25s ease-out infinite;
+
+  @keyframes marquee {
+    0% { transform: translate(0); }
+    to { transform: translate(-50%); }
+  }
+  @keyframes pulse-ring {
+    0% { opacity: 0.55; transform: scale(0.85); }
+    to { opacity: 0; transform: scale(1.35); }
+  }
+  @keyframes float {
+    0%, to { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes outcome-burst {
+    0% { filter: saturate(0.95); transform: perspective(1100px) translate(0) rotateY(-8deg) scale(0.92); }
+    45% { transform: perspective(1100px) translate3d(-3%, -2%, 90px) rotateY(-4deg) scale(1.06); }
+    80% { filter: saturate(1.05); transform: perspective(1100px) translate3d(-9%, -5%, 240px) rotateY(2deg) scale(1.22); }
+    to { filter: saturate(0.95); transform: perspective(1100px) translate(0) rotateY(-8deg) scale(0.92); }
+  }
+  @keyframes frame-fade {
+    0% { opacity: 1; }
+    55% { opacity: 0.35; }
+    80% { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes car-drive {
+    0% { opacity: 0; transform: translate(75%) scale(0.5); }
+    12% { opacity: 1; transform: translate(30%) scale(0.62); }
+    40% { opacity: 1; transform: translate(0%) scale(0.8); }
+    75% { opacity: 1; transform: translate(-70%) scale(1.15); }
+    95% { opacity: 0; transform: translate(-125%) scale(1.5); }
+    to { opacity: 0; transform: translate(-125%) scale(1.5); }
+  }
+  @keyframes car-finish {
+    0% { opacity: 0; transform: translate(150%, -78%) scale(0.16); }
+    8% { opacity: 1; }
+    35% { opacity: 1; transform: translate(70%, -40%) scale(0.42); }
+    65% { opacity: 1; transform: translate(10%, -8%) scale(0.82); }
+    92% { opacity: 0; transform: translate(-120%, 18%) scale(1.35); }
+    to { opacity: 0; transform: translate(-120%, 18%) scale(1.35); }
+  }
+  @keyframes car-rumble {
+    0% { filter: blur(0); transform: translateY(0) rotate(0); }
+    25% { filter: blur(0.4px); transform: translateY(-0.35%) rotate(-0.25deg); }
+    50% { filter: blur(0.6px); transform: translateY(0.2%) rotate(0.15deg); }
+    75% { filter: blur(0.4px); transform: translateY(-0.2%) rotate(0.25deg); }
+    to { filter: blur(0); transform: translateY(0) rotate(0); }
+  }
+  @keyframes caret-blink {
+    0%, 70%, to { opacity: 1; }
+    20%, 50% { opacity: 0; }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Raw token values
+   ------------------------------------------------------------------------- */
+:root {
+  --radius: 0.75rem;
+
+  --background: oklch(99.5% 0.002 250);
+  --foreground: oklch(22% 0.03 250);
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(22% 0.03 250);
+  --popover: oklch(100% 0 0);
+  --popover-foreground: oklch(22% 0.03 250);
+  --primary: oklch(56% 0.122 243);
+  --primary-foreground: oklch(99% 0.002 250);
+  --secondary: oklch(96.5% 0.008 240);
+  --secondary-foreground: oklch(28% 0.03 250);
+  --muted: oklch(96.5% 0.008 240);
+  --muted-foreground: oklch(50% 0.02 245);
+  --accent: oklch(62.6% 0.183 38);
+  --accent-foreground: oklch(99% 0.002 250);
+  --destructive: oklch(58% 0.2 25);
+  --destructive-foreground: oklch(99% 0.002 250);
+  --success: oklch(62.7% 0.194 149.214);
+  --border: oklch(22% 0.03 250 / 0.12);
+  --input: oklch(22% 0.03 250 / 0.16);
+  --ring: oklch(56% 0.122 243);
+
+  --surface: oklch(100% 0 0);
+  --surface-2: oklch(98.5% 0.005 240);
+  --ink: oklch(97.5% 0.006 90);
+
+  --brand-blue: oklch(56% 0.122 243);
+  --brand-orange: oklch(62.6% 0.183 38);
+  --brand-amber: oklch(76.5% 0.148 71);
+  --brand-lime: oklch(80% 0.157 118);
+  --brand-green: oklch(65.5% 0.144 133);
+
+  /* Base colour every drop-shadow/flood is mixed from (the "ink" navy). */
+  --ink-shadow: oklch(22% 0.03 250);
+
+  /* Derived — these compose from the tokens above, so themes rarely need to
+     override them. */
+  --gradient-hero:
+    radial-gradient(110% 85% at 82% 18%, color-mix(in oklab, var(--brand-blue) 14%, transparent), transparent 62%),
+    radial-gradient(80% 70% at 6% 6%, color-mix(in oklab, var(--brand-amber) 12%, transparent), transparent 60%),
+    radial-gradient(70% 60% at 50% 100%, color-mix(in oklab, var(--brand-lime) 10%, transparent), transparent 65%),
+    linear-gradient(180deg, var(--surface), var(--background));
+  --gradient-accent: linear-gradient(100deg, var(--accent), color-mix(in oklab, var(--accent) 80%, white));
+  --gradient-primary: linear-gradient(100deg, var(--brand-blue), var(--brand-green));
+  --gradient-brand: linear-gradient(100deg, var(--brand-orange), var(--brand-amber), var(--brand-lime), var(--brand-green), var(--brand-blue));
+
+  --shadow-glow: 0 30px 80px -40px color-mix(in oklab, var(--brand-blue) 55%, transparent);
+  --shadow-accent: 0 16px 34px -16px color-mix(in oklab, var(--accent) 55%, transparent);
+  --shadow-card: 0 26px 60px -34px color-mix(in oklab, var(--ink-shadow) 40%, transparent);
+
+  color-scheme: light;
+}
+
+/* ---------------------------------------------------------------------------
+   Themes
+   ---------------------------------------------------------------------------
+   Every colour, gradient, shadow and font in the site resolves to a token
+   above — components never hard-code values. A theme is just a block that
+   overrides those tokens, keyed by `data-theme` on <html> (set by the header's
+   ThemePicker; the list of themes lives in src/components/themes.ts). Dark
+   themes also get the `dark` class so `dark:` utilities apply.
+   To make a theme the permanent brand, copy its values into :root above.
+   ------------------------------------------------------------------------- */
+
+/* Midnight Pit Lane — the default palette after lights-out: deep navy garage,
+   the same orange but hotter, chrome-blue highlights. */
+[data-theme="midnight"] {
+  --background: oklch(16% 0.025 255);
+  --foreground: oklch(95% 0.01 250);
+  --card: oklch(20% 0.028 255);
+  --card-foreground: oklch(95% 0.01 250);
+  --popover: oklch(20% 0.028 255);
+  --popover-foreground: oklch(95% 0.01 250);
+  --primary: oklch(70% 0.13 240);
+  --primary-foreground: oklch(14% 0.02 255);
+  --secondary: oklch(25% 0.03 255);
+  --secondary-foreground: oklch(92% 0.01 250);
+  --muted: oklch(24% 0.028 255);
+  --muted-foreground: oklch(70% 0.02 250);
+  --accent: oklch(70% 0.185 42);
+  --accent-foreground: oklch(14% 0.02 255);
+  --border: oklch(95% 0.01 250 / 0.12);
+  --input: oklch(95% 0.01 250 / 0.16);
+  --ring: oklch(70% 0.13 240);
+  --surface: oklch(21% 0.028 255);
+  --surface-2: oklch(24% 0.03 255);
+  --ink: oklch(26% 0.03 255);
+  --brand-blue: oklch(70% 0.13 240);
+  --brand-orange: oklch(70% 0.185 42);
+  --brand-amber: oklch(80% 0.15 75);
+  --brand-lime: oklch(82% 0.16 120);
+  --brand-green: oklch(72% 0.15 140);
+  --ink-shadow: oklch(5% 0.01 255);
+  --shadow-card: 0 26px 60px -30px color-mix(in oklab, var(--ink-shadow) 80%, transparent);
+  color-scheme: dark;
+}
+
+/* Monza Rosso — Italian racing red on warm cream paper; gold and slate
+   support. Editorial, confident. */
+[data-theme="monza"] {
+  --background: oklch(98% 0.012 80);
+  --foreground: oklch(21% 0.02 30);
+  --card: oklch(99.5% 0.006 85);
+  --card-foreground: oklch(21% 0.02 30);
+  --popover: oklch(99.5% 0.006 85);
+  --popover-foreground: oklch(21% 0.02 30);
+  --primary: oklch(35% 0.05 260);
+  --primary-foreground: oklch(99% 0.005 85);
+  --secondary: oklch(95% 0.02 80);
+  --secondary-foreground: oklch(28% 0.02 30);
+  --muted: oklch(95% 0.02 80);
+  --muted-foreground: oklch(48% 0.02 40);
+  --accent: oklch(54% 0.22 28);
+  --accent-foreground: oklch(99% 0.005 85);
+  --border: oklch(21% 0.02 30 / 0.13);
+  --input: oklch(21% 0.02 30 / 0.17);
+  --ring: oklch(54% 0.22 28);
+  --surface: oklch(99.5% 0.006 85);
+  --surface-2: oklch(97% 0.015 80);
+  --ink: oklch(96% 0.02 80);
+  --brand-blue: oklch(45% 0.07 260);
+  --brand-orange: oklch(54% 0.22 28);
+  --brand-amber: oklch(78% 0.15 85);
+  --brand-lime: oklch(78% 0.12 105);
+  --brand-green: oklch(58% 0.12 150);
+  --ink-shadow: oklch(25% 0.03 30);
+}
+
+/* Silverstone — British racing green with gold trim on a misty off-white.
+   Heritage, trust, understated. */
+[data-theme="silverstone"] {
+  --background: oklch(98.5% 0.006 140);
+  --foreground: oklch(22% 0.035 165);
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(22% 0.035 165);
+  --popover: oklch(100% 0 0);
+  --popover-foreground: oklch(22% 0.035 165);
+  --primary: oklch(45% 0.11 160);
+  --primary-foreground: oklch(99% 0.003 140);
+  --secondary: oklch(95.5% 0.015 145);
+  --secondary-foreground: oklch(28% 0.035 165);
+  --muted: oklch(95.5% 0.015 145);
+  --muted-foreground: oklch(48% 0.03 165);
+  --accent: oklch(46% 0.12 158);
+  --accent-foreground: oklch(99% 0.003 140);
+  --border: oklch(22% 0.035 165 / 0.13);
+  --input: oklch(22% 0.035 165 / 0.17);
+  --ring: oklch(46% 0.12 158);
+  --surface: oklch(100% 0 0);
+  --surface-2: oklch(97.5% 0.01 145);
+  --ink: oklch(96% 0.015 145);
+  --brand-blue: oklch(50% 0.1 235);
+  --brand-orange: oklch(72% 0.14 70);
+  --brand-amber: oklch(80% 0.14 85);
+  --brand-lime: oklch(78% 0.14 125);
+  --brand-green: oklch(46% 0.12 158);
+  --ink-shadow: oklch(22% 0.035 165);
+}
+
+/* Neon Grid — dark violet-black with electric cyan and magenta: the AI
+   answer grid at night. Bold, techy. */
+[data-theme="neon"] {
+  --background: oklch(14% 0.025 285);
+  --foreground: oklch(96% 0.01 285);
+  --card: oklch(18% 0.03 285);
+  --card-foreground: oklch(96% 0.01 285);
+  --popover: oklch(18% 0.03 285);
+  --popover-foreground: oklch(96% 0.01 285);
+  --primary: oklch(68% 0.2 300);
+  --primary-foreground: oklch(12% 0.02 285);
+  --secondary: oklch(24% 0.035 285);
+  --secondary-foreground: oklch(94% 0.01 285);
+  --muted: oklch(23% 0.03 285);
+  --muted-foreground: oklch(72% 0.03 285);
+  --accent: oklch(82% 0.15 200);
+  --accent-foreground: oklch(12% 0.02 285);
+  --border: oklch(96% 0.01 285 / 0.13);
+  --input: oklch(96% 0.01 285 / 0.17);
+  --ring: oklch(82% 0.15 200);
+  --surface: oklch(19% 0.03 285);
+  --surface-2: oklch(23% 0.035 285);
+  --ink: oklch(25% 0.035 285);
+  --brand-blue: oklch(82% 0.15 200);
+  --brand-orange: oklch(68% 0.24 340);
+  --brand-amber: oklch(88% 0.17 95);
+  --brand-lime: oklch(88% 0.2 130);
+  --brand-green: oklch(78% 0.17 165);
+  --ink-shadow: oklch(0% 0 0);
+  --shadow-card: 0 26px 60px -30px color-mix(in oklab, var(--ink-shadow) 80%, transparent);
+  --shadow-glow: 0 30px 80px -40px color-mix(in oklab, var(--accent) 60%, transparent);
+  color-scheme: dark;
+}
+
+/* Deep Ocean — cool blue-teal system on a crisp sky-white; coral for warmth.
+   Calm, analytical, enterprise. */
+[data-theme="ocean"] {
+  --background: oklch(98.5% 0.008 230);
+  --foreground: oklch(24% 0.05 250);
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(24% 0.05 250);
+  --popover: oklch(100% 0 0);
+  --popover-foreground: oklch(24% 0.05 250);
+  --primary: oklch(58% 0.12 195);
+  --primary-foreground: oklch(99% 0.003 230);
+  --secondary: oklch(95.5% 0.015 230);
+  --secondary-foreground: oklch(30% 0.05 250);
+  --muted: oklch(95.5% 0.015 230);
+  --muted-foreground: oklch(50% 0.035 245);
+  --accent: oklch(52% 0.17 252);
+  --accent-foreground: oklch(99% 0.003 230);
+  --border: oklch(24% 0.05 250 / 0.12);
+  --input: oklch(24% 0.05 250 / 0.16);
+  --ring: oklch(52% 0.17 252);
+  --surface: oklch(100% 0 0);
+  --surface-2: oklch(97.5% 0.01 230);
+  --ink: oklch(96.5% 0.012 230);
+  --brand-blue: oklch(52% 0.17 252);
+  --brand-orange: oklch(68% 0.17 32);
+  --brand-amber: oklch(82% 0.1 80);
+  --brand-lime: oklch(82% 0.12 180);
+  --brand-green: oklch(66% 0.13 165);
+  --ink-shadow: oklch(24% 0.05 250);
+}
+
+/* Graphite & Sand — warm charcoal with brushed-gold accents; a quiet luxury
+   take. Premium, minimal. */
+[data-theme="graphite"] {
+  --background: oklch(21% 0.008 60);
+  --foreground: oklch(94% 0.012 80);
+  --card: oklch(25% 0.009 60);
+  --card-foreground: oklch(94% 0.012 80);
+  --popover: oklch(25% 0.009 60);
+  --popover-foreground: oklch(94% 0.012 80);
+  --primary: oklch(78% 0.06 70);
+  --primary-foreground: oklch(20% 0.01 60);
+  --secondary: oklch(29% 0.01 60);
+  --secondary-foreground: oklch(92% 0.012 80);
+  --muted: oklch(28% 0.01 60);
+  --muted-foreground: oklch(70% 0.02 75);
+  --accent: oklch(80% 0.12 82);
+  --accent-foreground: oklch(20% 0.01 60);
+  --border: oklch(94% 0.012 80 / 0.12);
+  --input: oklch(94% 0.012 80 / 0.16);
+  --ring: oklch(80% 0.12 82);
+  --surface: oklch(26% 0.009 60);
+  --surface-2: oklch(29% 0.01 60);
+  --ink: oklch(31% 0.01 60);
+  --brand-blue: oklch(68% 0.07 240);
+  --brand-orange: oklch(80% 0.12 82);
+  --brand-amber: oklch(86% 0.1 90);
+  --brand-lime: oklch(82% 0.08 120);
+  --brand-green: oklch(72% 0.08 150);
+  --ink-shadow: oklch(5% 0.005 60);
+  --shadow-card: 0 26px 60px -30px color-mix(in oklab, var(--ink-shadow) 80%, transparent);
+  color-scheme: dark;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------- */
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  /* Defensive backstop so a single too-wide element can't put the page into
+     sideways scroll. `clip` (not `hidden`) so neither element becomes a
+     scroll container — `overflow-x: hidden` on <body> made it one, which can
+     paint a phantom scrollbar gutter on mobile. Sections that animate content
+     off-canvas (hero, outcomes) also clip locally. */
+  html,
+  body {
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  /* All h2 headings site-wide use the body face at regular weight. */
+  h2 {
+    font-family: var(--font-sans);
+    font-weight: 400;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Typography utilities
+   ------------------------------------------------------------------------- */
+
+/* Section heading — fluid up to the 32px desktop size so it doesn't overflow
+   narrow phones. */
+@utility heading-h2 {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: clamp(22px, 4vw + 14px, 32px);
+  line-height: 1.25;
+}
+
+/* Racing Sans One accent — the highlighted phrase inside a heading. Fluid up
+   to 48px so it fits inside nowrap wrappers on small screens. */
+@utility heading-accent {
+  font-family: "Racing Sans One", cursive;
+  font-weight: 400;
+  font-size: clamp(24px, 7vw + 4px, 48px);
+  line-height: 1.15;
+}
+
+/* ---------------------------------------------------------------------------
+   Custom utilities (work with variants, e.g. hover:surface-card, lg:eyebrow)
+   ------------------------------------------------------------------------- */
+@utility surface-card {
+  background: linear-gradient(160deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+@utility bg-hero {
+  background-image: var(--gradient-hero);
+}
+
+@utility running {
+  animation-play-state: running;
+}
+
+@utility paused {
+  animation-play-state: paused;
+}
+
+/* ---------------------------------------------------------------------------
+   Component-style classes (ink sketch strokes, drifting background orbs)
+   ------------------------------------------------------------------------- */
+.ink-stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1px;
+}
+
+.ink-drawn .ink-stroke {
+  animation: ink-draw 1.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.ink-drawn .ink-stroke-2 {
+  animation-duration: 1s;
+  animation-delay: 0.45s;
+}
+
+@keyframes ink-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.drift-orb {
+  position: absolute;
+  display: block;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.5;
+}
+
+.drift-orb-a {
+  top: -12%;
+  left: -8%;
+  width: 26rem;
+  height: 26rem;
+  background: radial-gradient(circle, color-mix(in oklab, var(--brand-orange) 22%, transparent), transparent 70%);
+  animation: drift-a 26s ease-in-out infinite alternate;
+}
+
+.drift-orb-b {
+  right: -10%;
+  bottom: -18%;
+  width: 30rem;
+  height: 30rem;
+  background: radial-gradient(circle, color-mix(in oklab, var(--brand-blue, var(--brand-orange)) 18%, transparent), transparent 70%);
+  animation: drift-b 34s ease-in-out infinite alternate;
+}
+
+@keyframes drift-a {
+  0% { transform: translate(0) scale(1); }
+  to { transform: translate(4rem, 2.5rem) scale(1.12); }
+}
+
+@keyframes drift-b {
+  0% { transform: translate(0) scale(1.08); }
+  to { transform: translate(-3.5rem, -2rem) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-stroke {
+    stroke-dashoffset: 0;
+  }
+  .ink-drawn .ink-stroke,
+  .drift-orb {
+    animation: none;
+  }
+}

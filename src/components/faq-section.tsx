@@ -44,7 +44,11 @@ export function FaqSection() {
             <Reveal key={faq.q} delay={i * 80}>
               <Accordion.Item value={faq.q} className="border-b border-border">
                 <Accordion.Header className="flex">
-                  <Accordion.Trigger className="flex flex-1 cursor-pointer items-center justify-between py-4 text-left font-display text-lg font-semibold transition-all hover:no-underline [&[data-state=open]>svg]:rotate-180">
+                  <Accordion.Trigger
+                    // Form-filler browser extensions stamp `fdprocessedid` on
+                    // buttons before hydration; ignore that attribute diff.
+                    suppressHydrationWarning
+                    className="flex flex-1 cursor-pointer items-center justify-between py-4 text-left font-display text-lg font-semibold transition-all hover:no-underline [&[data-state=open]>svg]:rotate-180">
                     {faq.q}
                     <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
                   </Accordion.Trigger>

@@ -42,7 +42,7 @@ export function SiteFooter() {
             alt="Markiverse"
             width={200}
             height={84}
-            className="h-13 w-auto"
+            className="h-13 w-auto dark:rounded-lg dark:bg-white dark:px-2 dark:py-1"
           />
           <p>
             Strategy · Experience · Demand · Revenue · Intelligence · Creative

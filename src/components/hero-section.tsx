@@ -2,7 +2,11 @@ import { ArrowRight } from "lucide-react";
 
 function HeroVisual() {
   return (
-    <div className="relative z-10">
+    // On short desktop viewports the card would be taller than the space
+    // below the header and get clipped. Card height ≈ 3:2 image + ~9rem of
+    // fixed chrome, so cap the width from the available height
+    // (100svh − 4rem header − 6rem section padding) and it always fits.
+    <div className="relative z-10 w-full lg:max-w-[calc((100svh-19rem)*1.5+2.5rem)] lg:justify-self-center">
       <div className="surface-card relative rounded-[2rem] p-4 sm:p-5">
         <div className="flex items-baseline justify-between px-1 pb-3">
           <p className="eyebrow text-muted-foreground">The AI answer grid</p>
@@ -21,7 +25,7 @@ function HeroVisual() {
           {["AI Acceleration", "Outcome First", "Revenue Growth"].map((tag) => (
             <div
               key={tag}
-              className="inline-flex items-center justify-center rounded-full border border-ink-black px-4 py-3.5 text-center text-sm font-semibold text-ink-black"
+              className="inline-flex items-center justify-center rounded-full border border-foreground px-3 py-3.5 text-center text-sm font-semibold whitespace-nowrap text-foreground"
             >
               {tag}
             </div>
@@ -35,7 +39,7 @@ function HeroVisual() {
           height={1024}
           alt=""
           aria-hidden="true"
-          className="animate-car-drive w-[85%] drop-shadow-[0_40px_50px_rgba(15,25,40,0.28)]"
+          className="animate-car-drive w-[85%] drop-shadow-lift"
         />
       </div>
     </div>
@@ -44,9 +48,14 @@ function HeroVisual() {
 
 export function HeroSection() {
   return (
-    <section id="top" className="relative overflow-visible bg-hero pt-32">
+    // Fill the first viewport and vertically centre the content in the space
+    // below the fixed 4rem header, so the gap above matches the gap below.
+    <section
+      id="top"
+      className="relative flex min-h-svh flex-col justify-center overflow-x-clip bg-hero pt-16"
+    >
       <div className="pointer-events-none absolute inset-0 grid-lines opacity-60" />
-      <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-5 pb-20 sm:px-8 lg:grid-cols-2">
+      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-14 px-5 py-10 sm:px-8 lg:grid-cols-2 lg:py-12">
         <div className="min-w-0">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 eyebrow text-muted-foreground">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
@@ -54,7 +63,9 @@ export function HeroSection() {
           </span>
           <h1 className="mt-7 heading-h2">
             Is your brand racing in AI, and turning{" "}
-            <span className="hero-highlight-wrap">
+            {/* Keep the highlight on one line only once there is room —
+                forcing nowrap on phones caused horizontal scroll. */}
+            <span className="sm:whitespace-nowrap">
               <span className="relative inline-block">
                 <span className="relative z-10 heading-accent text-accent">
                   speed into revenue

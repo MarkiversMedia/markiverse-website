@@ -26,7 +26,7 @@ export function OutcomesSection() {
   return (
     <section
       id="outcomes"
-      className="relative border-y border-border bg-[color-mix(in_oklab,var(--ink)_60%,transparent)] py-24 sm:py-32"
+      className="relative overflow-x-clip border-y border-border bg-[color-mix(in_oklab,var(--ink)_60%,transparent)] py-24 sm:py-32"
     >
       <DriftOrbs />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
@@ -64,7 +64,7 @@ export function OutcomesSection() {
                 src="/assets/car-cutout-sketch.png"
                 alt=""
                 aria-hidden="true"
-                className="animate-car-rumble w-full drop-shadow-[0_25px_35px_rgba(15,25,40,0.3)]"
+                className="animate-car-rumble w-full drop-shadow-lift-sm"
               />
             </span>
           </Reveal>

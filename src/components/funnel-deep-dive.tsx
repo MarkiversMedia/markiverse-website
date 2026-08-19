@@ -273,7 +273,7 @@ function FunnelStage({
             dx="0"
             dy="4"
             stdDeviation="4"
-            floodColor="rgba(15,25,40,0.18)"
+            style={{ floodColor: "color-mix(in oklab, var(--ink-shadow) 18%, transparent)" }}
           />
         </filter>
       </defs>
@@ -293,7 +293,7 @@ function FunnelStage({
         x="160"
         y={midY - (stage.percent < 100 ? 16 : 6)}
         textAnchor="middle"
-        className="fill-white font-display text-[11px] font-semibold uppercase tracking-wider"
+        className="fill-primary-foreground font-display text-[11px] font-semibold uppercase tracking-wider"
       >
         {stage.title}
       </text>
@@ -301,7 +301,7 @@ function FunnelStage({
         x="160"
         y={midY + (stage.percent < 100 ? 5 : 16)}
         textAnchor="middle"
-        className="fill-white font-display text-[15px] font-bold"
+        className="fill-primary-foreground font-display text-[15px] font-bold"
       >
         {nf(stage.value)}
       </text>
@@ -310,7 +310,7 @@ function FunnelStage({
           x="160"
           y={midY + 22}
           textAnchor="middle"
-          className="fill-white/80 font-sans text-[10px]"
+          className="fill-primary-foreground/80 font-sans text-[10px]"
         >
           {stage.percent}% retained
         </text>
@@ -481,7 +481,7 @@ function OpportunitiesTable() {
               key={r}
               onClick={() => setRange(r)}
               suppressHydrationWarning
-              className={`rounded-full px-3 py-1 text-xs transition-colors ${range === r ? "bg-accent/15 font-semibold text-accent" : "text-muted-foreground hover:text-foreground"}`}
+              className={`min-h-9 rounded-full px-3 py-1 text-xs transition-colors sm:min-h-0 ${range === r ? "bg-accent/15 font-semibold text-accent" : "text-muted-foreground hover:text-foreground"}`}
             >
               {r}
             </button>
@@ -670,7 +670,7 @@ export function FunnelDeepDive() {
               ref={svgRef}
               viewBox="0 0 320 400"
               className="h-auto w-full max-w-[360px]"
-              style={{ filter: "drop-shadow(0 20px 40px rgba(15,25,40,0.12))" }}
+              style={{ filter: "drop-shadow(var(--drop-shadow-float))" }}
             >
               {STAGES.map((stage, i) => (
                 <g
@@ -698,7 +698,7 @@ export function FunnelDeepDive() {
                 onMouseEnter={() => setActive(stage)}
                 onClick={() => setActive(stage)}
                 suppressHydrationWarning
-                className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 font-medium transition-colors ${active.id === stage.id ? "bg-secondary text-foreground" : "hover:bg-secondary/50"}`}
+                className={`inline-flex min-h-10 items-center gap-2 rounded-full px-3 py-1.5 font-medium transition-colors sm:min-h-0 ${active.id === stage.id ? "bg-secondary text-foreground" : "hover:bg-secondary/50"}`}
               >
                 <span
                   className="h-2.5 w-2.5 rounded-full"
@@ -769,7 +769,7 @@ export function FunnelDeepDive() {
                   </p>
                   {stat.sub && (
                     <p
-                      className={`mt-1 text-xs ${stat.tone === "positive" ? "text-green-600" : stat.tone === "negative" ? "text-red-600" : "text-muted-foreground"}`}
+                      className={`mt-1 text-xs ${stat.tone === "positive" ? "text-success" : stat.tone === "negative" ? "text-destructive" : "text-muted-foreground"}`}
                     >
                       {stat.tone === "positive" && "↑ "}
                       {stat.tone === "negative" && "↓ "}
@@ -809,7 +809,7 @@ export function FunnelDeepDive() {
                   <div className="flex items-center gap-3 text-sm">
                     <span className="font-semibold">{channel.value}%</span>
                     <span
-                      className={`text-xs ${channel.tone === "positive" ? "text-green-600" : channel.tone === "negative" ? "text-red-600" : "text-muted-foreground"}`}
+                      className={`text-xs ${channel.tone === "positive" ? "text-success" : channel.tone === "negative" ? "text-destructive" : "text-muted-foreground"}`}
                     >
                       {channel.tone === "positive"
                         ? "↑"
